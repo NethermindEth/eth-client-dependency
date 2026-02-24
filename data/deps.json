@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-02-24T22:50:38.970Z",
+  "generatedAt": "2026-02-24T23:57:49.045Z",
   "clients": [
     {
       "id": "geth",
@@ -10,7 +10,7 @@
       "elNetworkShare": 0.41,
       "clNetworkShare": 0,
       "scannedTag": "v1.17.0",
-      "scannedAt": "2026-02-24T22:49:02.274Z",
+      "scannedAt": "2026-02-24T23:56:13.516Z",
       "tagPinned": true,
       "limitations": []
     },
@@ -23,7 +23,7 @@
       "elNetworkShare": 0.38,
       "clNetworkShare": 0,
       "scannedTag": "1.36.0",
-      "scannedAt": "2026-02-24T22:49:07.256Z",
+      "scannedAt": "2026-02-24T23:56:15.753Z",
       "tagPinned": true,
       "limitations": [
         "Direct dependencies only — no packages.lock.json exists in repo",
@@ -39,7 +39,7 @@
       "elNetworkShare": 0.09,
       "clNetworkShare": 0,
       "scannedTag": "26.1.0",
-      "scannedAt": "2026-02-24T22:49:09.780Z",
+      "scannedAt": "2026-02-24T23:56:17.656Z",
       "tagPinned": true,
       "limitations": []
     },
@@ -52,7 +52,7 @@
       "elNetworkShare": 0.06,
       "clNetworkShare": 0,
       "scannedTag": "v3.3.8",
-      "scannedAt": "2026-02-24T22:49:28.308Z",
+      "scannedAt": "2026-02-24T23:56:46.781Z",
       "tagPinned": true,
       "limitations": []
     },
@@ -65,7 +65,7 @@
       "elNetworkShare": 0.05,
       "clNetworkShare": 0,
       "scannedTag": "v1.11.1",
-      "scannedAt": "2026-02-24T22:50:02.165Z",
+      "scannedAt": "2026-02-24T23:57:18.116Z",
       "tagPinned": true,
       "limitations": [
         "Cargo.lock dev dep filtering is approximate — workspace-level dev deps only"
@@ -80,7 +80,7 @@
       "elNetworkShare": 0,
       "clNetworkShare": 0.38,
       "scannedTag": "v8.1.0",
-      "scannedAt": "2026-02-24T22:50:32.857Z",
+      "scannedAt": "2026-02-24T23:57:47.520Z",
       "tagPinned": true,
       "limitations": [
         "Cargo.lock dev dep filtering is approximate — workspace-level dev deps only"
@@ -95,7 +95,7 @@
       "elNetworkShare": 0,
       "clNetworkShare": 0.28,
       "scannedTag": "v7.1.2",
-      "scannedAt": "2026-02-24T22:50:35.800Z",
+      "scannedAt": "2026-02-24T23:57:48.259Z",
       "tagPinned": true,
       "limitations": [
         "Prysm uses Bazel as primary build system; go.sum reflects Go module deps only"
@@ -110,7 +110,7 @@
       "elNetworkShare": 0,
       "clNetworkShare": 0.13,
       "scannedTag": "26.2.0",
-      "scannedAt": "2026-02-24T22:50:38.402Z",
+      "scannedAt": "2026-02-24T23:57:48.565Z",
       "tagPinned": true,
       "limitations": [
         "Direct dependencies only — no Gradle lock file exists in repo",
@@ -126,7 +126,7 @@
       "elNetworkShare": 0,
       "clNetworkShare": 0.07,
       "scannedTag": "v1.40.0",
-      "scannedAt": "2026-02-24T22:50:38.688Z",
+      "scannedAt": "2026-02-24T23:57:48.825Z",
       "tagPinned": true,
       "limitations": [
         "Dev dep classification is approximate for transitive deps"
@@ -141,7 +141,7 @@
       "elNetworkShare": 0,
       "clNetworkShare": 0.12,
       "scannedTag": "v26.2.1",
-      "scannedAt": "2026-02-24T22:50:38.933Z",
+      "scannedAt": "2026-02-24T23:57:49.018Z",
       "tagPinned": true,
       "limitations": [
         "Direct dependencies only — Nim ecosystem uses git submodules, no transitive resolution",
@@ -472,7 +472,8 @@
         "name": "github.com/decred/dcrd/dcrec/secp256k1/v4",
         "version": "v4.0.1",
         "ecosystem": "golang",
-        "depType": "package"
+        "depType": "package",
+        "canonicalId": "libsecp256k1"
       },
       {
         "purl": "pkg:golang/github.com/deepmap/oapi-codegen@v1.6.0",
@@ -654,7 +655,8 @@
         "name": "github.com/golang/snappy",
         "version": "v1.0.0",
         "ecosystem": "golang",
-        "depType": "package"
+        "depType": "package",
+        "canonicalId": "snappy"
       },
       {
         "purl": "pkg:golang/github.com/google/go-cmp@v0.7.0",
@@ -1151,14 +1153,16 @@
         "name": "github.com/supranational/blst",
         "version": "v0.3.16-0.20250831170142-f48500c1fdbe",
         "ecosystem": "golang",
-        "depType": "package"
+        "depType": "package",
+        "canonicalId": "blst"
       },
       {
         "purl": "pkg:golang/github.com/syndtr/goleveldb@v1.0.1-0.20210819022825-2ae1ddf74ef7",
         "name": "github.com/syndtr/goleveldb",
         "version": "v1.0.1-0.20210819022825-2ae1ddf74ef7",
         "ecosystem": "golang",
-        "depType": "package"
+        "depType": "package",
+        "canonicalId": "leveldb"
       },
       {
         "purl": "pkg:golang/github.com/tklauser/go-sysconf@v0.3.12",
@@ -1368,7 +1372,8 @@
         "name": "google.golang.org/protobuf",
         "version": "v1.36.11",
         "ecosystem": "golang",
-        "depType": "package"
+        "depType": "package",
+        "canonicalId": "protobuf"
       },
       {
         "purl": "pkg:golang/gopkg.in/check.v1@v1.0.0-20201130134442-10cb98267c6c",
@@ -1454,7 +1459,8 @@
         "name": "Ckzg.Bindings",
         "version": "2.1.5.1544",
         "ecosystem": "nuget",
-        "depType": "package"
+        "depType": "package",
+        "canonicalId": "kzg"
       },
       {
         "purl": "pkg:nuget/CommunityToolkit.HighPerformance@8.4.0",
@@ -1496,7 +1502,8 @@
         "name": "Google.Protobuf",
         "version": "3.33.2",
         "ecosystem": "nuget",
-        "depType": "package"
+        "depType": "package",
+        "canonicalId": "protobuf"
       },
       {
         "purl": "pkg:nuget/Google.Protobuf.Tools@3.33.2",
@@ -1931,20 +1938,6 @@
         "version": "0.8.6",
         "ecosystem": "nuget",
         "depType": "package"
-      },
-      {
-        "purl": "pkg:generic/kernel32.dll",
-        "name": "kernel32.dll",
-        "version": "runtime",
-        "ecosystem": "generic",
-        "depType": "native"
-      },
-      {
-        "purl": "pkg:generic/libc",
-        "name": "libc",
-        "version": "runtime",
-        "ecosystem": "generic",
-        "depType": "native"
       }
     ],
     "besu": [
@@ -3003,14 +2996,16 @@
         "name": "com.google.protobuf:protobuf-java",
         "version": "3.25.5",
         "ecosystem": "maven",
-        "depType": "package"
+        "depType": "package",
+        "canonicalId": "protobuf"
       },
       {
         "purl": "pkg:maven/com.google.protobuf/protobuf-java@4.28.3",
         "name": "com.google.protobuf:protobuf-java",
         "version": "4.28.3",
         "ecosystem": "maven",
-        "depType": "package"
+        "depType": "package",
+        "canonicalId": "protobuf"
       },
       {
         "purl": "pkg:maven/com.google.protobuf/protobuf-java-util@3.25.8",
@@ -3360,14 +3355,16 @@
         "name": "io.consensys.protocols:jc-kzg-4844",
         "version": "2.0.0",
         "ecosystem": "maven",
-        "depType": "package"
+        "depType": "package",
+        "canonicalId": "kzg"
       },
       {
         "purl": "pkg:maven/io.consensys.protocols/jc-kzg-4844@2.1.5",
         "name": "io.consensys.protocols:jc-kzg-4844",
         "version": "2.1.5",
         "ecosystem": "maven",
-        "depType": "package"
+        "depType": "package",
+        "canonicalId": "kzg"
       },
       {
         "purl": "pkg:maven/io.consensys.tuweni/tuweni-bytes@2.7.0",
@@ -5733,28 +5730,32 @@
         "name": "org.bouncycastle:bcpkix-jdk18on",
         "version": "1.80",
         "ecosystem": "maven",
-        "depType": "package"
+        "depType": "package",
+        "canonicalId": "bouncycastle"
       },
       {
         "purl": "pkg:maven/org.bouncycastle/bcprov-jdk18on@1.77",
         "name": "org.bouncycastle:bcprov-jdk18on",
         "version": "1.77",
         "ecosystem": "maven",
-        "depType": "package"
+        "depType": "package",
+        "canonicalId": "bouncycastle"
       },
       {
         "purl": "pkg:maven/org.bouncycastle/bcprov-jdk18on@1.78.1",
         "name": "org.bouncycastle:bcprov-jdk18on",
         "version": "1.78.1",
         "ecosystem": "maven",
-        "depType": "package"
+        "depType": "package",
+        "canonicalId": "bouncycastle"
       },
       {
         "purl": "pkg:maven/org.bouncycastle/bcprov-jdk18on@1.80",
         "name": "org.bouncycastle:bcprov-jdk18on",
         "version": "1.80",
         "ecosystem": "maven",
-        "depType": "package"
+        "depType": "package",
+        "canonicalId": "bouncycastle"
       },
       {
         "purl": "pkg:maven/org.bouncycastle/bcutil-jdk18on@1.80",
@@ -7861,7 +7862,8 @@
         "name": "org.rocksdb:rocksdbjni",
         "version": "9.7.3",
         "ecosystem": "maven",
-        "depType": "package"
+        "depType": "package",
+        "canonicalId": "rocksdb"
       },
       {
         "purl": "pkg:maven/org.slf4j/slf4j-api@1.7.36",
@@ -8976,7 +8978,8 @@
         "name": "github.com/decred/dcrd/dcrec/secp256k1/v4",
         "version": "v4.3.0",
         "ecosystem": "golang",
-        "depType": "package"
+        "depType": "package",
+        "canonicalId": "libsecp256k1"
       },
       {
         "purl": "pkg:golang/github.com/dgryski/trifles@v0.0.0-20230903005119-f50d829f2e54",
@@ -9284,7 +9287,8 @@
         "name": "github.com/golang/snappy",
         "version": "v1.0.0",
         "ecosystem": "golang",
-        "depType": "package"
+        "depType": "package",
+        "canonicalId": "snappy"
       },
       {
         "purl": "pkg:golang/github.com/google/btree@v1.1.3",
@@ -9578,7 +9582,8 @@
         "name": "github.com/libp2p/go-libp2p",
         "version": "v0.37.2",
         "ecosystem": "golang",
-        "depType": "package"
+        "depType": "package",
+        "canonicalId": "libp2p"
       },
       {
         "purl": "pkg:golang/github.com/libp2p/go-libp2p-asn-util@v0.4.1",
@@ -10390,7 +10395,8 @@
         "name": "github.com/supranational/blst",
         "version": "v0.3.14",
         "ecosystem": "golang",
-        "depType": "package"
+        "depType": "package",
+        "canonicalId": "blst"
       },
       {
         "purl": "pkg:golang/github.com/thomaso-mirodin/intmath@v0.0.0-20160323211736-5dc6d854e46e",
@@ -10698,7 +10704,8 @@
         "name": "google.golang.org/protobuf",
         "version": "v1.36.10",
         "ecosystem": "golang",
-        "depType": "package"
+        "depType": "package",
+        "canonicalId": "protobuf"
       },
       {
         "purl": "pkg:golang/gopkg.in/check.v1@v1.0.0-20201130134442-10cb98267c6c",
@@ -11806,7 +11813,8 @@
         "name": "blst",
         "version": "0.3.16",
         "ecosystem": "cargo",
-        "depType": "package"
+        "depType": "package",
+        "canonicalId": "blst"
       },
       {
         "purl": "pkg:cargo/boa_ast@0.21.0",
@@ -11960,7 +11968,8 @@
         "name": "c-kzg",
         "version": "2.1.5",
         "ecosystem": "cargo",
-        "depType": "package"
+        "depType": "package",
+        "canonicalId": "kzg"
       },
       {
         "purl": "pkg:cargo/camino@1.2.2",
@@ -13885,7 +13894,8 @@
         "name": "k256",
         "version": "0.13.4",
         "ecosystem": "cargo",
-        "depType": "package"
+        "depType": "package",
+        "canonicalId": "libsecp256k1"
       },
       {
         "purl": "pkg:cargo/kasuari@0.4.11",
@@ -13990,7 +14000,8 @@
         "name": "librocksdb-sys",
         "version": "0.17.3+10.4.2",
         "ecosystem": "cargo",
-        "depType": "package"
+        "depType": "package",
+        "canonicalId": "rocksdb"
       },
       {
         "purl": "pkg:cargo/libz-sys@1.1.23",
@@ -14949,7 +14960,8 @@
         "name": "prost",
         "version": "0.14.3",
         "ecosystem": "cargo",
-        "depType": "package"
+        "depType": "package",
+        "canonicalId": "protobuf"
       },
       {
         "purl": "pkg:cargo/prost-derive@0.14.3",
@@ -15418,7 +15430,8 @@
         "name": "rocksdb",
         "version": "0.24.0",
         "ecosystem": "cargo",
-        "depType": "package"
+        "depType": "package",
+        "canonicalId": "rocksdb"
       },
       {
         "purl": "pkg:cargo/rolling-file@0.2.0",
@@ -15642,28 +15655,32 @@
         "name": "secp256k1",
         "version": "0.30.0",
         "ecosystem": "cargo",
-        "depType": "package"
+        "depType": "package",
+        "canonicalId": "libsecp256k1"
       },
       {
         "purl": "pkg:cargo/secp256k1@0.31.1",
         "name": "secp256k1",
         "version": "0.31.1",
         "ecosystem": "cargo",
-        "depType": "package"
+        "depType": "package",
+        "canonicalId": "libsecp256k1"
       },
       {
         "purl": "pkg:cargo/secp256k1-sys@0.10.1",
         "name": "secp256k1-sys",
         "version": "0.10.1",
         "ecosystem": "cargo",
-        "depType": "package"
+        "depType": "package",
+        "canonicalId": "libsecp256k1"
       },
       {
         "purl": "pkg:cargo/secp256k1-sys@0.11.0",
         "name": "secp256k1-sys",
         "version": "0.11.0",
         "ecosystem": "cargo",
-        "depType": "package"
+        "depType": "package",
+        "canonicalId": "libsecp256k1"
       },
       {
         "purl": "pkg:cargo/security-framework@3.5.1",
@@ -17603,7 +17620,8 @@
         "name": "rustsecp256k1_v0_11",
         "version": "0.10.1",
         "ecosystem": "generic",
-        "depType": "native"
+        "depType": "native",
+        "canonicalId": "libsecp256k1"
       },
       {
         "purl": "pkg:generic/jemalloc",
@@ -18354,7 +18372,8 @@
         "name": "blst",
         "version": "0.3.16",
         "ecosystem": "cargo",
-        "depType": "package"
+        "depType": "package",
+        "canonicalId": "blst"
       },
       {
         "purl": "pkg:cargo/blstrs@0.7.1",
@@ -18424,7 +18443,8 @@
         "name": "c-kzg",
         "version": "2.1.5",
         "ecosystem": "cargo",
-        "depType": "package"
+        "depType": "package",
+        "canonicalId": "kzg"
       },
       {
         "purl": "pkg:cargo/camino@1.2.2",
@@ -20139,7 +20159,8 @@
         "name": "k256",
         "version": "0.13.4",
         "ecosystem": "cargo",
-        "depType": "package"
+        "depType": "package",
+        "canonicalId": "libsecp256k1"
       },
       {
         "purl": "pkg:cargo/keccak@0.1.5",
@@ -20223,7 +20244,8 @@
         "name": "libp2p",
         "version": "0.56.1",
         "ecosystem": "cargo",
-        "depType": "package"
+        "depType": "package",
+        "canonicalId": "libp2p"
       },
       {
         "purl": "pkg:cargo/libp2p-allow-block-list@0.6.0",
@@ -20902,7 +20924,8 @@
         "name": "openssl",
         "version": "0.10.75",
         "ecosystem": "cargo",
-        "depType": "package"
+        "depType": "package",
+        "canonicalId": "openssl"
       },
       {
         "purl": "pkg:cargo/openssl-macros@0.1.1",
@@ -20930,7 +20953,8 @@
         "name": "openssl-sys",
         "version": "0.9.111",
         "ecosystem": "cargo",
-        "depType": "package"
+        "depType": "package",
+        "canonicalId": "openssl"
       },
       {
         "purl": "pkg:cargo/opentelemetry@0.30.0",
@@ -21280,7 +21304,8 @@
         "name": "prost",
         "version": "0.13.5",
         "ecosystem": "cargo",
-        "depType": "package"
+        "depType": "package",
+        "canonicalId": "protobuf"
       },
       {
         "purl": "pkg:cargo/prost-derive@0.13.5",
@@ -21826,14 +21851,16 @@
         "name": "secp256k1",
         "version": "0.30.0",
         "ecosystem": "cargo",
-        "depType": "package"
+        "depType": "package",
+        "canonicalId": "libsecp256k1"
       },
       {
         "purl": "pkg:cargo/secp256k1-sys@0.10.1",
         "name": "secp256k1-sys",
         "version": "0.10.1",
         "ecosystem": "cargo",
-        "depType": "package"
+        "depType": "package",
+        "canonicalId": "libsecp256k1"
       },
       {
         "purl": "pkg:cargo/security-framework@2.11.1",
@@ -23466,7 +23493,8 @@
         "name": "rustsecp256k1_v0_10_0",
         "version": "0.10.1",
         "ecosystem": "generic",
-        "depType": "native"
+        "depType": "native",
+        "canonicalId": "libsecp256k1"
       },
       {
         "purl": "pkg:generic/jemalloc",
@@ -23580,7 +23608,8 @@
         "name": "github.com/btcsuite/btcd/btcec/v2",
         "version": "v2.3.4",
         "ecosystem": "golang",
-        "depType": "package"
+        "depType": "package",
+        "canonicalId": "libsecp256k1"
       },
       {
         "purl": "pkg:golang/github.com/cenkalti/backoff/v4@v4.3.0",
@@ -23769,7 +23798,8 @@
         "name": "github.com/decred/dcrd/dcrec/secp256k1/v4",
         "version": "v4.3.0",
         "ecosystem": "golang",
-        "depType": "package"
+        "depType": "package",
+        "canonicalId": "libsecp256k1"
       },
       {
         "purl": "pkg:golang/github.com/deepmap/oapi-codegen@v1.8.2",
@@ -24077,7 +24107,8 @@
         "name": "github.com/golang/snappy",
         "version": "v0.0.5-0.20231225225746-43d5d4cd4e0e",
         "ecosystem": "golang",
-        "depType": "package"
+        "depType": "package",
+        "canonicalId": "snappy"
       },
       {
         "purl": "pkg:golang/github.com/google/gnostic-models@v0.6.8",
@@ -24399,7 +24430,8 @@
         "name": "github.com/libp2p/go-libp2p",
         "version": "v0.39.1",
         "ecosystem": "golang",
-        "depType": "package"
+        "depType": "package",
+        "canonicalId": "libp2p"
       },
       {
         "purl": "pkg:golang/github.com/libp2p/go-libp2p-asn-util@v0.4.1",
@@ -25190,14 +25222,16 @@
         "name": "github.com/supranational/blst",
         "version": "v0.3.16-0.20250831170142-f48500c1fdbe",
         "ecosystem": "golang",
-        "depType": "package"
+        "depType": "package",
+        "canonicalId": "blst"
       },
       {
         "purl": "pkg:golang/github.com/syndtr/goleveldb@v1.0.1-0.20210819022825-2ae1ddf74ef7",
         "name": "github.com/syndtr/goleveldb",
         "version": "v1.0.1-0.20210819022825-2ae1ddf74ef7",
         "ecosystem": "golang",
-        "depType": "package"
+        "depType": "package",
+        "canonicalId": "leveldb"
       },
       {
         "purl": "pkg:golang/github.com/thomaso-mirodin/intmath@v0.0.0-20160323211736-5dc6d854e46e",
@@ -25554,7 +25588,8 @@
         "name": "google.golang.org/protobuf",
         "version": "v1.36.5",
         "ecosystem": "golang",
-        "depType": "package"
+        "depType": "package",
+        "canonicalId": "protobuf"
       },
       {
         "purl": "pkg:golang/gopkg.in/cenkalti/backoff.v1@v1.1.0",
@@ -25759,28 +25794,32 @@
         "name": "io.libp2p:jvm-libp2p",
         "version": "1.2.2-RELEASE",
         "ecosystem": "maven",
-        "depType": "package"
+        "depType": "package",
+        "canonicalId": "libp2p"
       },
       {
         "purl": "pkg:maven/tech.pegasys/jblst@0.3.15",
         "name": "tech.pegasys:jblst",
         "version": "0.3.15",
         "ecosystem": "maven",
-        "depType": "package"
+        "depType": "package",
+        "canonicalId": "blst"
       },
       {
         "purl": "pkg:maven/io.consensys.protocols/jc-kzg-4844@2.1.5",
         "name": "io.consensys.protocols:jc-kzg-4844",
         "version": "2.1.5",
         "ecosystem": "maven",
-        "depType": "package"
+        "depType": "package",
+        "canonicalId": "kzg"
       },
       {
         "purl": "pkg:maven/io.github.crate-crypto/java-eth-kzg@0.8.0",
         "name": "io.github.crate-crypto:java-eth-kzg",
         "version": "0.8.0",
         "ecosystem": "maven",
-        "depType": "package"
+        "depType": "package",
+        "canonicalId": "kzg"
       },
       {
         "purl": "pkg:maven/org.hdrhistogram/HdrHistogram@2.2.2",
@@ -25913,7 +25952,8 @@
         "name": "org.rocksdb:rocksdbjni",
         "version": "10.2.1",
         "ecosystem": "maven",
-        "depType": "package"
+        "depType": "package",
+        "canonicalId": "rocksdb"
       },
       {
         "purl": "pkg:maven/org.fusesource.leveldbjni/leveldbjni-win64@1.8",
@@ -26151,14 +26191,16 @@
         "name": "org.bouncycastle:bcprov-jdk18on",
         "version": "1.83",
         "ecosystem": "maven",
-        "depType": "package"
+        "depType": "package",
+        "canonicalId": "bouncycastle"
       },
       {
         "purl": "pkg:maven/org.bouncycastle/bcpkix-jdk18on@1.83",
         "name": "org.bouncycastle:bcpkix-jdk18on",
         "version": "1.83",
         "ecosystem": "maven",
-        "depType": "package"
+        "depType": "package",
+        "canonicalId": "bouncycastle"
       },
       {
         "purl": "pkg:maven/org.bouncycastle/bcutil-jdk18on@1.83",
@@ -37314,7 +37356,8 @@
       ],
       "elCoverage": 0.41,
       "clCoverage": 0,
-      "isCrossLayer": false
+      "isCrossLayer": false,
+      "canonicalId": "libsecp256k1"
     },
     "pkg:golang/github.com/deepmap/oapi-codegen@v1.6.0": {
       "clients": [
@@ -37546,7 +37589,8 @@
       ],
       "elCoverage": 0.47,
       "clCoverage": 0,
-      "isCrossLayer": false
+      "isCrossLayer": false,
+      "canonicalId": "snappy"
     },
     "pkg:golang/github.com/google/go-cmp@v0.7.0": {
       "clients": [
@@ -38161,7 +38205,8 @@
       ],
       "elCoverage": 0.41,
       "clCoverage": 0.28,
-      "isCrossLayer": true
+      "isCrossLayer": true,
+      "canonicalId": "blst"
     },
     "pkg:golang/github.com/syndtr/goleveldb@v1.0.1-0.20210819022825-2ae1ddf74ef7": {
       "clients": [
@@ -38170,7 +38215,8 @@
       ],
       "elCoverage": 0.41,
       "clCoverage": 0.28,
-      "isCrossLayer": true
+      "isCrossLayer": true,
+      "canonicalId": "leveldb"
     },
     "pkg:golang/github.com/tklauser/go-sysconf@v0.3.12": {
       "clients": [
@@ -38428,7 +38474,8 @@
       ],
       "elCoverage": 0.41,
       "clCoverage": 0,
-      "isCrossLayer": false
+      "isCrossLayer": false,
+      "canonicalId": "protobuf"
     },
     "pkg:golang/gopkg.in/check.v1@v1.0.0-20201130134442-10cb98267c6c": {
       "clients": [
@@ -38534,7 +38581,8 @@
       ],
       "elCoverage": 0.38,
       "clCoverage": 0,
-      "isCrossLayer": false
+      "isCrossLayer": false,
+      "canonicalId": "kzg"
     },
     "pkg:nuget/CommunityToolkit.HighPerformance@8.4.0": {
       "clients": [
@@ -38582,7 +38630,8 @@
       ],
       "elCoverage": 0.38,
       "clCoverage": 0,
-      "isCrossLayer": false
+      "isCrossLayer": false,
+      "canonicalId": "protobuf"
     },
     "pkg:nuget/Google.Protobuf.Tools@3.33.2": {
       "clients": [
@@ -39073,22 +39122,6 @@
       "isCrossLayer": false
     },
     "pkg:nuget/ZstdSharp.Port@0.8.6": {
-      "clients": [
-        "nethermind"
-      ],
-      "elCoverage": 0.38,
-      "clCoverage": 0,
-      "isCrossLayer": false
-    },
-    "pkg:generic/kernel32.dll": {
-      "clients": [
-        "nethermind"
-      ],
-      "elCoverage": 0.38,
-      "clCoverage": 0,
-      "isCrossLayer": false
-    },
-    "pkg:generic/libc": {
       "clients": [
         "nethermind"
       ],
@@ -40302,7 +40335,8 @@
       ],
       "elCoverage": 0.09,
       "clCoverage": 0,
-      "isCrossLayer": false
+      "isCrossLayer": false,
+      "canonicalId": "protobuf"
     },
     "pkg:maven/com.google.protobuf/protobuf-java@4.28.3": {
       "clients": [
@@ -40310,7 +40344,8 @@
       ],
       "elCoverage": 0.09,
       "clCoverage": 0,
-      "isCrossLayer": false
+      "isCrossLayer": false,
+      "canonicalId": "protobuf"
     },
     "pkg:maven/com.google.protobuf/protobuf-java-util@3.25.8": {
       "clients": [
@@ -40711,7 +40746,8 @@
       ],
       "elCoverage": 0.09,
       "clCoverage": 0,
-      "isCrossLayer": false
+      "isCrossLayer": false,
+      "canonicalId": "kzg"
     },
     "pkg:maven/io.consensys.protocols/jc-kzg-4844@2.1.5": {
       "clients": [
@@ -40720,7 +40756,8 @@
       ],
       "elCoverage": 0.09,
       "clCoverage": 0.13,
-      "isCrossLayer": true
+      "isCrossLayer": true,
+      "canonicalId": "kzg"
     },
     "pkg:maven/io.consensys.tuweni/tuweni-bytes@2.7.0": {
       "clients": [
@@ -43435,7 +43472,8 @@
       ],
       "elCoverage": 0.09,
       "clCoverage": 0,
-      "isCrossLayer": false
+      "isCrossLayer": false,
+      "canonicalId": "bouncycastle"
     },
     "pkg:maven/org.bouncycastle/bcprov-jdk18on@1.77": {
       "clients": [
@@ -43443,7 +43481,8 @@
       ],
       "elCoverage": 0.09,
       "clCoverage": 0,
-      "isCrossLayer": false
+      "isCrossLayer": false,
+      "canonicalId": "bouncycastle"
     },
     "pkg:maven/org.bouncycastle/bcprov-jdk18on@1.78.1": {
       "clients": [
@@ -43451,7 +43490,8 @@
       ],
       "elCoverage": 0.09,
       "clCoverage": 0,
-      "isCrossLayer": false
+      "isCrossLayer": false,
+      "canonicalId": "bouncycastle"
     },
     "pkg:maven/org.bouncycastle/bcprov-jdk18on@1.80": {
       "clients": [
@@ -43459,7 +43499,8 @@
       ],
       "elCoverage": 0.09,
       "clCoverage": 0,
-      "isCrossLayer": false
+      "isCrossLayer": false,
+      "canonicalId": "bouncycastle"
     },
     "pkg:maven/org.bouncycastle/bcutil-jdk18on@1.80": {
       "clients": [
@@ -45873,7 +45914,8 @@
       ],
       "elCoverage": 0.09,
       "clCoverage": 0,
-      "isCrossLayer": false
+      "isCrossLayer": false,
+      "canonicalId": "rocksdb"
     },
     "pkg:maven/org.slf4j/slf4j-api@1.7.36": {
       "clients": [
@@ -47130,7 +47172,8 @@
       ],
       "elCoverage": 0.06,
       "clCoverage": 0.28,
-      "isCrossLayer": true
+      "isCrossLayer": true,
+      "canonicalId": "libsecp256k1"
     },
     "pkg:golang/github.com/dgryski/trifles@v0.0.0-20230903005119-f50d829f2e54": {
       "clients": [
@@ -47656,7 +47699,8 @@
       ],
       "elCoverage": 0.06,
       "clCoverage": 0,
-      "isCrossLayer": false
+      "isCrossLayer": false,
+      "canonicalId": "libp2p"
     },
     "pkg:golang/github.com/libp2p/go-libp2p-asn-util@v0.4.1": {
       "clients": [
@@ -48577,7 +48621,8 @@
       ],
       "elCoverage": 0.06,
       "clCoverage": 0,
-      "isCrossLayer": false
+      "isCrossLayer": false,
+      "canonicalId": "blst"
     },
     "pkg:golang/github.com/thomaso-mirodin/intmath@v0.0.0-20160323211736-5dc6d854e46e": {
       "clients": [
@@ -48868,7 +48913,8 @@
       ],
       "elCoverage": 0.06,
       "clCoverage": 0,
-      "isCrossLayer": false
+      "isCrossLayer": false,
+      "canonicalId": "protobuf"
     },
     "pkg:golang/lukechampine.com/blake3@v1.3.0": {
       "clients": [
@@ -50153,7 +50199,8 @@
       ],
       "elCoverage": 0.05,
       "clCoverage": 0.38,
-      "isCrossLayer": true
+      "isCrossLayer": true,
+      "canonicalId": "blst"
     },
     "pkg:cargo/boa_ast@0.21.0": {
       "clients": [
@@ -50337,7 +50384,8 @@
       ],
       "elCoverage": 0.05,
       "clCoverage": 0.38,
-      "isCrossLayer": true
+      "isCrossLayer": true,
+      "canonicalId": "kzg"
     },
     "pkg:cargo/camino@1.2.2": {
       "clients": [
@@ -52686,7 +52734,8 @@
       ],
       "elCoverage": 0.05,
       "clCoverage": 0.38,
-      "isCrossLayer": true
+      "isCrossLayer": true,
+      "canonicalId": "libsecp256k1"
     },
     "pkg:cargo/kasuari@0.4.11": {
       "clients": [
@@ -52810,7 +52859,8 @@
       ],
       "elCoverage": 0.05,
       "clCoverage": 0,
-      "isCrossLayer": false
+      "isCrossLayer": false,
+      "canonicalId": "rocksdb"
     },
     "pkg:cargo/libz-sys@1.1.23": {
       "clients": [
@@ -53970,7 +54020,8 @@
       ],
       "elCoverage": 0.05,
       "clCoverage": 0,
-      "isCrossLayer": false
+      "isCrossLayer": false,
+      "canonicalId": "protobuf"
     },
     "pkg:cargo/prost-derive@0.14.3": {
       "clients": [
@@ -54529,7 +54580,8 @@
       ],
       "elCoverage": 0.05,
       "clCoverage": 0,
-      "isCrossLayer": false
+      "isCrossLayer": false,
+      "canonicalId": "rocksdb"
     },
     "pkg:cargo/rolling-file@0.2.0": {
       "clients": [
@@ -54800,7 +54852,8 @@
       ],
       "elCoverage": 0.05,
       "clCoverage": 0.38,
-      "isCrossLayer": true
+      "isCrossLayer": true,
+      "canonicalId": "libsecp256k1"
     },
     "pkg:cargo/secp256k1@0.31.1": {
       "clients": [
@@ -54808,7 +54861,8 @@
       ],
       "elCoverage": 0.05,
       "clCoverage": 0,
-      "isCrossLayer": false
+      "isCrossLayer": false,
+      "canonicalId": "libsecp256k1"
     },
     "pkg:cargo/secp256k1-sys@0.10.1": {
       "clients": [
@@ -54817,7 +54871,8 @@
       ],
       "elCoverage": 0.05,
       "clCoverage": 0.38,
-      "isCrossLayer": true
+      "isCrossLayer": true,
+      "canonicalId": "libsecp256k1"
     },
     "pkg:cargo/secp256k1-sys@0.11.0": {
       "clients": [
@@ -54825,7 +54880,8 @@
       ],
       "elCoverage": 0.05,
       "clCoverage": 0,
-      "isCrossLayer": false
+      "isCrossLayer": false,
+      "canonicalId": "libsecp256k1"
     },
     "pkg:cargo/security-framework@3.5.1": {
       "clients": [
@@ -58416,7 +58472,8 @@
       ],
       "elCoverage": 0,
       "clCoverage": 0.38,
-      "isCrossLayer": false
+      "isCrossLayer": false,
+      "canonicalId": "libp2p"
     },
     "pkg:cargo/libp2p-allow-block-list@0.6.0": {
       "clients": [
@@ -58904,7 +58961,8 @@
       ],
       "elCoverage": 0,
       "clCoverage": 0.38,
-      "isCrossLayer": false
+      "isCrossLayer": false,
+      "canonicalId": "openssl"
     },
     "pkg:cargo/openssl-macros@0.1.1": {
       "clients": [
@@ -58936,7 +58994,8 @@
       ],
       "elCoverage": 0,
       "clCoverage": 0.38,
-      "isCrossLayer": false
+      "isCrossLayer": false,
+      "canonicalId": "openssl"
     },
     "pkg:cargo/opentelemetry@0.30.0": {
       "clients": [
@@ -59104,7 +59163,8 @@
       ],
       "elCoverage": 0,
       "clCoverage": 0.38,
-      "isCrossLayer": false
+      "isCrossLayer": false,
+      "canonicalId": "protobuf"
     },
     "pkg:cargo/prost-derive@0.13.5": {
       "clients": [
@@ -60248,7 +60308,8 @@
       ],
       "elCoverage": 0,
       "clCoverage": 0.28,
-      "isCrossLayer": false
+      "isCrossLayer": false,
+      "canonicalId": "libsecp256k1"
     },
     "pkg:golang/github.com/cespare/cp@v1.1.1": {
       "clients": [
@@ -60536,7 +60597,8 @@
       ],
       "elCoverage": 0,
       "clCoverage": 0.28,
-      "isCrossLayer": false
+      "isCrossLayer": false,
+      "canonicalId": "snappy"
     },
     "pkg:golang/github.com/google/gnostic-models@v0.6.8": {
       "clients": [
@@ -60728,7 +60790,8 @@
       ],
       "elCoverage": 0,
       "clCoverage": 0.28,
-      "isCrossLayer": false
+      "isCrossLayer": false,
+      "canonicalId": "libp2p"
     },
     "pkg:golang/github.com/libp2p/go-libp2p-pubsub@v0.14.2": {
       "clients": [
@@ -61368,7 +61431,8 @@
       ],
       "elCoverage": 0,
       "clCoverage": 0.28,
-      "isCrossLayer": false
+      "isCrossLayer": false,
+      "canonicalId": "protobuf"
     },
     "pkg:golang/gopkg.in/cenkalti/backoff.v1@v1.1.0": {
       "clients": [
@@ -61552,7 +61616,8 @@
       ],
       "elCoverage": 0,
       "clCoverage": 0.13,
-      "isCrossLayer": false
+      "isCrossLayer": false,
+      "canonicalId": "libp2p"
     },
     "pkg:maven/tech.pegasys/jblst@0.3.15": {
       "clients": [
@@ -61560,7 +61625,8 @@
       ],
       "elCoverage": 0,
       "clCoverage": 0.13,
-      "isCrossLayer": false
+      "isCrossLayer": false,
+      "canonicalId": "blst"
     },
     "pkg:maven/io.github.crate-crypto/java-eth-kzg@0.8.0": {
       "clients": [
@@ -61568,7 +61634,8 @@
       ],
       "elCoverage": 0,
       "clCoverage": 0.13,
-      "isCrossLayer": false
+      "isCrossLayer": false,
+      "canonicalId": "kzg"
     },
     "pkg:maven/org.hdrhistogram/HdrHistogram@2.2.2": {
       "clients": [
@@ -61696,7 +61763,8 @@
       ],
       "elCoverage": 0,
       "clCoverage": 0.13,
-      "isCrossLayer": false
+      "isCrossLayer": false,
+      "canonicalId": "rocksdb"
     },
     "pkg:maven/org.fusesource.leveldbjni/leveldbjni-win64@1.8": {
       "clients": [
@@ -61872,7 +61940,8 @@
       ],
       "elCoverage": 0,
       "clCoverage": 0.13,
-      "isCrossLayer": false
+      "isCrossLayer": false,
+      "canonicalId": "bouncycastle"
     },
     "pkg:maven/org.bouncycastle/bcpkix-jdk18on@1.83": {
       "clients": [
@@ -61880,7 +61949,8 @@
       ],
       "elCoverage": 0,
       "clCoverage": 0.13,
-      "isCrossLayer": false
+      "isCrossLayer": false,
+      "canonicalId": "bouncycastle"
     },
     "pkg:maven/org.bouncycastle/bcutil-jdk18on@1.83": {
       "clients": [
@@ -74146,5 +74216,6 @@
       "clCoverage": 0.12,
       "isCrossLayer": false
     }
-  }
+  },
+  "failedClients": []
 }
