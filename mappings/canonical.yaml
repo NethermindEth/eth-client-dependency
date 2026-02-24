@@ -13,9 +13,11 @@ libraries:
       - pkg:cargo/libsecp256k1
     native_names:
       - secp256k1
+      - libsecp256k1
       - rustsecp256k1_v0_13
       - rustsecp256k1_v0_10
-      - libsecp256k1
+      - rustsecp256k1_v0_11
+      - rustsecp256k1_v0_10_0
 
   blst:
     description: "BLS12-381 signature library by Supranational — used for validator attestations"

@@ -50,7 +50,7 @@ export async function collectBesu(config: ClientConfig): Promise<ClientResult> {
   const tag = await getLatestTag(config.repo)
   const xmlContent = await fetchRaw(config.repo, tag, 'gradle/verification-metadata.xml')
   const packageDeps = parseVerificationMetadata(xmlContent)
-  const nativeDeps = await scanJNI(config.repo)
+  const nativeDeps = await scanJNI(config.repo, tag)
 
   return {
     client: config,

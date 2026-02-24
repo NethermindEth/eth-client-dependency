@@ -82,7 +82,7 @@ export async function collectNethermind(config: ClientConfig): Promise<ClientRes
   // Nethermind's NethermindEth org has SAML SSO on GitHub API — use raw.githubusercontent.com
   const propsContent = await fetchRaw(config.repo, tag, 'Directory.Packages.props')
   const packageDeps = parseDirectoryPackagesProps(propsContent)
-  const nativeDeps = await scanDllImport(config.repo)
+  const nativeDeps = await scanDllImport(config.repo, tag)
 
   return {
     client: config,

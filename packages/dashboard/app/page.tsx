@@ -9,11 +9,8 @@ import FreshnessBar from '@/components/FreshnessBar'
 export default async function OverviewPage() {
   const data = await getDepsData()
   const topDeps = getTopSharedDeps(data, 100)
+  const sharedCount = Object.values(data.frequency).filter(f => f.clients.length >= 2).length
   const crossLayerCount = Object.values(data.frequency).filter(f => f.isCrossLayer).length
-  const nativeCount = Object.values(data.frequency).filter(f =>
-    Object.values(data.deps).flat().find(d => d.purl === Object.keys(data.frequency)[0])?.depType === 'native'
-  ).length
-  void nativeCount
 
   return (
     <div className="space-y-6">
@@ -33,7 +30,7 @@ export default async function OverviewPage() {
         {[
           { label: 'Clients tracked', value: data.clients.length },
           { label: 'Unique dependencies', value: Object.keys(data.frequency).length.toLocaleString() },
-          { label: 'Shared (2+ clients)', value: topDeps.length.toLocaleString() },
+          { label: 'Shared (2+ clients)', value: sharedCount.toLocaleString() },
           { label: 'Cross-layer (EL+CL)', value: crossLayerCount.toLocaleString() },
         ].map(stat => (
           <div key={stat.label} className="bg-surface border border-border rounded p-3">
@@ -74,8 +71,8 @@ export default async function OverviewPage() {
         <h2 className="text-sm font-semibold text-muted uppercase tracking-wider mb-3">
           Most shared dependencies
         </h2>
-        <div className="border border-border rounded overflow-hidden">
-          <table className="w-full text-sm">
+        <div className="border border-border rounded overflow-x-auto">
+          <table className="w-full text-sm min-w-[600px]">
             <thead>
               <tr className="border-b border-border bg-surface">
                 <th className="text-left px-4 py-2.5 text-xs text-muted font-medium">Package</th>

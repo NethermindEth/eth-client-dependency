@@ -8,6 +8,7 @@ import CoverageBar from '@/components/CoverageBar'
 export default async function LibrariesPage() {
   const data = await getDepsData()
   const deps = getTopSharedDeps(data, 500)
+  const totalShared = Object.values(data.frequency).filter(f => f.clients.length >= 2).length
 
   // Heatmap: clients × top shared deps (top 30)
   const heatmapDeps = deps.slice(0, 30)
@@ -18,7 +19,7 @@ export default async function LibrariesPage() {
       <div>
         <h1 className="text-xl font-bold">Libraries</h1>
         <p className="text-sm text-muted mt-1">
-          {deps.length} dependencies shared across 2 or more clients
+          {totalShared} dependencies shared across 2 or more clients
         </p>
       </div>
 
@@ -88,8 +89,8 @@ export default async function LibrariesPage() {
         <h2 className="text-sm font-semibold text-muted uppercase tracking-wider mb-3">
           All shared dependencies
         </h2>
-        <div className="border border-border rounded overflow-hidden">
-          <table className="w-full text-sm">
+        <div className="border border-border rounded overflow-x-auto">
+          <table className="w-full text-sm min-w-[520px]">
             <thead>
               <tr className="border-b border-border bg-surface">
                 <th className="text-left px-4 py-2.5 text-xs text-muted font-medium">Package</th>

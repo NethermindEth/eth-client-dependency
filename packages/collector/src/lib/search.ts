@@ -3,7 +3,6 @@ import type { RawDep } from '../types.js'
 
 // Scan Go source for #cgo directives — detects vendored C libraries
 export async function scanCGO(repo: string, tag: string): Promise<RawDep[]> {
-  await sleep(2000)  // GitHub Search: 30 req/min
   const files = await searchCode(repo, 'import "C"')
 
   const nativeDeps: RawDep[] = []
@@ -39,8 +38,8 @@ export async function scanCGO(repo: string, tag: string): Promise<RawDep[]> {
           }
         }
       }
-    } catch {
-      // file fetch failed — skip
+    } catch (err) {
+      console.warn(`  [scanCGO] failed to fetch ${filePath} from ${repo}:`, err)
     }
   }
 
@@ -48,8 +47,7 @@ export async function scanCGO(repo: string, tag: string): Promise<RawDep[]> {
 }
 
 // Scan Java source for System.loadLibrary() calls
-export async function scanJNI(repo: string): Promise<RawDep[]> {
-  await sleep(2000)
+export async function scanJNI(repo: string, tag: string): Promise<RawDep[]> {
   const files = await searchCode(repo, 'System.loadLibrary')
 
   const nativeDeps: RawDep[] = []
@@ -58,7 +56,7 @@ export async function scanJNI(repo: string): Promise<RawDep[]> {
   for (const filePath of files) {
     await sleep(500)
     try {
-      const content = await fetchRaw(repo, 'HEAD', filePath)
+      const content = await fetchRaw(repo, tag, filePath)
       const matches = content.match(/System\.loadLibrary\("([^"]+)"\)/g) ?? []
       for (const match of matches) {
         const lib = match.match(/"([^"]+)"/)?.[1]
@@ -82,9 +80,19 @@ export async function scanJNI(repo: string): Promise<RawDep[]> {
   return nativeDeps
 }
 
+// Windows OS system DLLs — always present, not meaningful external deps
+const WINDOWS_SYSTEM_DLLS = new Set([
+  'kernel32.dll', 'kernel32', 'ntdll.dll', 'ntdll',
+  'user32.dll', 'user32', 'advapi32.dll', 'advapi32',
+  'ole32.dll', 'ole32', 'oleaut32.dll', 'oleaut32',
+  'ws2_32.dll', 'ws2_32', 'wininet.dll', 'wininet',
+  'shell32.dll', 'shell32', 'shlwapi.dll', 'shlwapi',
+  'msvcrt.dll', 'msvcrt', 'ucrtbase.dll', 'ucrtbase',
+  'libc', 'libm', 'libdl', 'libpthread', 'libstdc++',
+])
+
 // Scan C# source for [DllImport] / [LibraryImport] attributes
-export async function scanDllImport(repo: string): Promise<RawDep[]> {
-  await sleep(2000)
+export async function scanDllImport(repo: string, tag: string): Promise<RawDep[]> {
   const files = await searchCode(repo, 'DllImport')
 
   const nativeDeps: RawDep[] = []
@@ -93,12 +101,12 @@ export async function scanDllImport(repo: string): Promise<RawDep[]> {
   for (const filePath of files.filter(f => f.endsWith('.cs'))) {
     await sleep(500)
     try {
-      const content = await fetchRaw(repo, 'HEAD', filePath)
+      const content = await fetchRaw(repo, tag, filePath)
       // Match [DllImport("libname")] and [LibraryImport("libname")]
       const matches = content.match(/\[(?:Dll|Library)Import\("([^"]+)"\)/g) ?? []
       for (const match of matches) {
         const lib = match.match(/"([^"]+)"/)?.[1]
-        if (lib && !seen.has(lib)) {
+        if (lib && !seen.has(lib) && !WINDOWS_SYSTEM_DLLS.has(lib.toLowerCase())) {
           seen.add(lib)
           nativeDeps.push({
             name: lib,

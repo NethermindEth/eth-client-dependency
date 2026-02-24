@@ -6,3 +6,4 @@ node_modules/
 .env.local
 dist/
 *.tsbuildinfo
+packages/dashboard/test-results/

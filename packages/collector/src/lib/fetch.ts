@@ -9,12 +9,36 @@ function githubHeaders(): HeadersInit {
   }
 }
 
+export async function sleep(ms: number): Promise<void> {
+  return new Promise(resolve => setTimeout(resolve, ms))
+}
+
+// Retry wrapper with exponential backoff; waits 60s on 429 (rate limit)
+export async function withRetry<T>(fn: () => Promise<T>, attempts = 3): Promise<T> {
+  for (let i = 0; i < attempts; i++) {
+    try {
+      return await fn()
+    } catch (e: any) {
+      if (i === attempts - 1) throw e
+      const wait = e?.status === 429 ? 60_000 : 2_000 * (i + 1)
+      await sleep(wait)
+    }
+  }
+  throw new Error('unreachable')
+}
+
 // Fetch raw file content from raw.githubusercontent.com — no auth, no rate limit, no 1MB cap
 export async function fetchRaw(repo: string, ref: string, path: string): Promise<string> {
   const url = `https://raw.githubusercontent.com/${repo}/${ref}/${path}`
-  const res = await fetch(url)
-  if (!res.ok) throw new Error(`fetchRaw failed: ${res.status} ${url}`)
-  return res.text()
+  return withRetry(async () => {
+    const res = await fetch(url)
+    if (!res.ok) {
+      const err = new Error(`fetchRaw failed: ${res.status} ${url}`) as any
+      err.status = res.status
+      throw err
+    }
+    return res.text()
+  })
 }
 
 // Get the latest release tag for a repo.
@@ -47,30 +71,38 @@ export async function getLatestTag(repo: string): Promise<string> {
 export async function searchCode(repo: string, query: string): Promise<string[]> {
   const encoded = encodeURIComponent(`${query} repo:${repo}`)
   const url = `https://api.github.com/search/code?q=${encoded}&per_page=30`
-  const res = await fetch(url, {
-    headers: {
-      ...githubHeaders(),
-      Accept: 'application/vnd.github.v3.text-match+json',
-    },
+  return withRetry(async () => {
+    const res = await fetch(url, {
+      headers: {
+        ...githubHeaders(),
+        Accept: 'application/vnd.github.v3.text-match+json',
+      },
+    })
+    if (res.status === 422) return []  // no results
+    if (!res.ok) {
+      const err = new Error(`searchCode failed: ${res.status} repo:${repo} q:${query}`) as any
+      err.status = res.status
+      throw err
+    }
+    const data = await res.json() as { items: Array<{ path: string }> }
+    return data.items.map(i => i.path)
   })
-  if (res.status === 422) return []  // no results
-  if (!res.ok) throw new Error(`searchCode failed: ${res.status} repo:${repo} q:${query}`)
-  const data = await res.json() as { items: Array<{ path: string }> }
-  return data.items.map(i => i.path)
 }
 
 // Fetch raw content of a specific file via GitHub API (used when raw.githubusercontent.com is insufficient)
 export async function fetchViaApi(repo: string, ref: string, path: string): Promise<string> {
   const url = `https://api.github.com/repos/${repo}/contents/${path}?ref=${ref}`
-  const res = await fetch(url, { headers: githubHeaders() })
-  if (!res.ok) throw new Error(`fetchViaApi failed: ${res.status} ${url}`)
-  const data = await res.json() as { content: string; encoding: string }
-  if (data.encoding === 'base64') {
-    return Buffer.from(data.content.replace(/\n/g, ''), 'base64').toString('utf-8')
-  }
-  return data.content
-}
-
-export async function sleep(ms: number): Promise<void> {
-  return new Promise(resolve => setTimeout(resolve, ms))
+  return withRetry(async () => {
+    const res = await fetch(url, { headers: githubHeaders() })
+    if (!res.ok) {
+      const err = new Error(`fetchViaApi failed: ${res.status} ${url}`) as any
+      err.status = res.status
+      throw err
+    }
+    const data = await res.json() as { content: string; encoding: string }
+    if (data.encoding === 'base64') {
+      return Buffer.from(data.content.replace(/\n/g, ''), 'base64').toString('utf-8')
+    }
+    return data.content
+  })
 }

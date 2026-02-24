@@ -16,9 +16,9 @@ export default function Nav() {
 
   return (
     <header className="border-b border-border sticky top-0 z-10 bg-bg/95 backdrop-blur">
-      <div className="max-w-7xl mx-auto px-4">
-        <div className="flex items-center gap-8 h-14">
-          <span className="font-bold text-text tracking-tight">
+      <div className="max-w-7xl mx-auto px-4 overflow-x-auto">
+        <div className="flex items-center gap-4 h-14 min-w-max">
+          <span className="font-bold text-text tracking-tight shrink-0">
             eth-dependency
           </span>
           <nav className="flex items-center gap-1">
@@ -26,7 +26,7 @@ export default function Nav() {
               <Link
                 key={link.href}
                 href={link.href}
-                className={`px-3 py-1.5 rounded text-sm transition-colors ${
+                className={`px-3 py-1.5 rounded text-sm transition-colors whitespace-nowrap ${
                   pathname === link.href
                     ? 'bg-surface text-text'
                     : 'text-muted hover:text-text'

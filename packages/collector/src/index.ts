@@ -1,5 +1,5 @@
 import 'dotenv/config'
-import { writeFileSync, mkdirSync } from 'fs'
+import { writeFileSync, renameSync, mkdirSync } from 'fs'
 import { join, dirname } from 'path'
 import { fileURLToPath } from 'url'
 
@@ -33,21 +33,22 @@ const collectors: Record<string, (config: ClientConfig) => Promise<ClientResult>
   nimbus: collectNimbus,
 }
 
-async function runCollector(config: ClientConfig): Promise<ClientResult | null> {
+async function runCollector(config: ClientConfig): Promise<{ result: ClientResult | null; error?: string }> {
   const collect = collectors[config.id]
   if (!collect) {
     console.warn(`  [${config.id}] no collector registered — skipping`)
-    return null
+    return { result: null, error: 'no collector registered' }
   }
   try {
     console.log(`  [${config.id}] collecting...`)
     const result = await collect(config)
     const prodCount = result.deps.filter(d => !d.isDev).length
     console.log(`  [${config.id}] done — ${prodCount} prod deps (tag: ${result.scannedTag})`)
-    return result
+    return { result }
   } catch (err) {
-    console.error(`  [${config.id}] FAILED:`, err)
-    return null
+    const message = err instanceof Error ? err.message : String(err)
+    console.warn(`  [${config.id}] FAILED: ${message}`, err)
+    return { result: null, error: message }
   }
 }
 
@@ -89,7 +90,7 @@ function computeFrequency(
   return frequency
 }
 
-function buildOutput(results: ClientResult[], frequency: Record<string, FrequencyEntry>): DepsOutput {
+function buildOutput(results: ClientResult[], frequency: Record<string, FrequencyEntry>, failedClients: Array<{ id: string; error: string }>): DepsOutput {
   const deps: Record<string, NormalizedDep[]> = {}
 
   for (const result of results) {
@@ -116,6 +117,7 @@ function buildOutput(results: ClientResult[], frequency: Record<string, Frequenc
     })),
     deps,
     frequency,
+    failedClients,
   }
 }
 
@@ -128,24 +130,38 @@ async function main() {
   }
 
   const results: ClientResult[] = []
+  const failedClients: Array<{ id: string; error: string }> = []
 
   // Run collectors sequentially to respect rate limits
   for (const client of CLIENTS) {
-    const result = await runCollector(client)
-    if (result) results.push(result)
+    const { result, error } = await runCollector(client)
+    if (result) {
+      results.push(result)
+    } else if (error) {
+      failedClients.push({ id: client.id, error })
+    }
+  }
+
+  if (failedClients.length > 0) {
+    console.warn(`\nWARNING: ${failedClients.length} client(s) failed: ${failedClients.map(f => f.id).join(', ')}`)
+    if (failedClients.length > 3) {
+      console.warn('More than 3 clients failed — output may be significantly incomplete')
+    }
   }
 
   console.log(`\nCollected ${results.length}/${CLIENTS.length} clients`)
   console.log('Computing frequency...')
 
   const frequency = computeFrequency(results)
-  const output = buildOutput(results, frequency)
+  const output = buildOutput(results, frequency, failedClients)
 
-  // Write to data/deps.json
+  // Write to data/deps.json atomically (tmp + rename) to avoid partial writes on kill
   const __dirname = dirname(fileURLToPath(import.meta.url))
   const outputPath = join(__dirname, '../../../data/deps.json')
   mkdirSync(dirname(outputPath), { recursive: true })
-  writeFileSync(outputPath, JSON.stringify(output, null, 2))
+  const tmpPath = outputPath + '.tmp'
+  writeFileSync(tmpPath, JSON.stringify(output, null, 2))
+  renameSync(tmpPath, outputPath)
 
   const totalUnique = Object.keys(frequency).length
   const crossLayer = Object.values(frequency).filter(f => f.isCrossLayer).length

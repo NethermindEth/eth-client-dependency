@@ -78,6 +78,7 @@ export async function collectNimbus(config: ClientConfig): Promise<ClientResult>
     limitations: [
       'Direct dependencies only — Nim ecosystem uses git submodules, no transitive resolution',
       'Version is tracking branch name, not pinned commit hash',
+      'pkg:github// PURLs do not match Go/Rust/Java PURLs — cross-client sharing is 0 even for equivalent libraries (e.g. nim-libp2p ↔ go-libp2p)',
     ],
   }
 }

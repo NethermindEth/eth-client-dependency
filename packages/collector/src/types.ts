@@ -57,4 +57,5 @@ export interface DepsOutput {
   }>
   deps: Record<string, NormalizedDep[]>
   frequency: Record<string, FrequencyEntry>
+  failedClients: Array<{ id: string; error: string }>
 }

@@ -16,7 +16,10 @@ export default function Badge({
   variant?: BadgeVariant
 }) {
   return (
-    <span className={`inline-flex items-center px-1.5 py-0.5 rounded text-xs border font-mono ${STYLES[variant]}`}>
+    <span
+      className={`inline-flex items-center px-1.5 py-0.5 rounded text-xs border font-mono max-w-[160px] truncate ${STYLES[variant]}`}
+      title={label}
+    >
       {label}
     </span>
   )

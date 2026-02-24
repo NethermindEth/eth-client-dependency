@@ -45,9 +45,12 @@ export default async function ClientsPage() {
               </div>
 
               {/* Limitations */}
-              {client.limitations.length > 0 && (
+              {(client.limitations.length > 0 || client.ecosystem === 'nim') && (
                 <div className="px-4 py-2 bg-native/5 border-b border-border text-xs text-native">
                   {client.limitations.map((l, i) => <div key={i}>⚠ {l}</div>)}
+                  {client.ecosystem === 'nim' && (
+                    <div>⚠ Nimbus uses <span className="font-mono">pkg:github//</span> PURLs (git submodules), which cannot be cross-matched with Go/Rust/Java package PURLs — &quot;shared with&quot; count will always be 0 for Nimbus</div>
+                  )}
                 </div>
               )}
 

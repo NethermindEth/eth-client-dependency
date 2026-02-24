@@ -1,11 +1,9 @@
-'use client'
+export const dynamic = 'force-dynamic'
 
-// Force client component since recharts needs browser
-import { useEffect, useState } from 'react'
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from 'recharts'
-import type { DepsData } from '@/lib/data'
+import { getDepsData } from '@/lib/data'
 import { getEcosystemStats } from '@/lib/stats'
 import Badge from '@/components/Badge'
+import EcosystemChart from '@/components/EcosystemChart'
 
 const ECO_COLORS: Record<string, string> = {
   go: '#00ADD8',
@@ -16,21 +14,8 @@ const ECO_COLORS: Record<string, string> = {
   nim: '#FFE953',
 }
 
-export default function EcosystemsPage() {
-  const [data, setData] = useState<DepsData | null>(null)
-
-  useEffect(() => {
-    fetch('/api/data').then(r => r.json()).then(setData)
-  }, [])
-
-  if (!data) {
-    return (
-      <div className="flex items-center justify-center h-48 text-muted text-sm">
-        Loading...
-      </div>
-    )
-  }
-
+export default async function EcosystemsPage() {
+  const data = await getDepsData()
   const stats = getEcosystemStats(data)
 
   const chartData = Object.entries(stats).map(([eco, s]) => ({
@@ -55,27 +40,12 @@ export default function EcosystemsPage() {
         <h2 className="text-sm font-semibold text-muted uppercase tracking-wider mb-4">
           Shared dep rate by ecosystem (among clients using same language)
         </h2>
-        <ResponsiveContainer width="100%" height={220}>
-          <BarChart data={chartData} margin={{ top: 0, right: 0, left: -20, bottom: 0 }}>
-            <XAxis dataKey="ecosystem" tick={{ fill: '#8b949e', fontSize: 12 }} />
-            <YAxis tick={{ fill: '#8b949e', fontSize: 12 }} unit="%" />
-            <Tooltip
-              contentStyle={{ background: '#161b22', border: '1px solid #30363d', borderRadius: 4 }}
-              labelStyle={{ color: '#e6edf3' }}
-              formatter={(val: number) => [`${val}%`, 'Sharing rate']}
-            />
-            <Bar dataKey="sharingRate" radius={[2, 2, 0, 0]}>
-              {chartData.map(entry => (
-                <Cell key={entry.ecosystem} fill={ECO_COLORS[entry.ecosystem] ?? '#8b949e'} />
-              ))}
-            </Bar>
-          </BarChart>
-        </ResponsiveContainer>
+        <EcosystemChart data={chartData} />
       </div>
 
       {/* Ecosystem breakdown table */}
-      <div className="border border-border rounded overflow-hidden">
-        <table className="w-full text-sm">
+      <div className="border border-border rounded overflow-x-auto">
+        <table className="w-full text-sm min-w-[480px]">
           <thead>
             <tr className="border-b border-border bg-surface">
               <th className="text-left px-4 py-2.5 text-xs text-muted font-medium">Ecosystem</th>

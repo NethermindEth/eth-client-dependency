@@ -49,7 +49,7 @@ export async function collectTeku(config: ClientConfig): Promise<ClientResult> {
   const tag = await getLatestTag(config.repo)
   const versionsGradle = await fetchRaw(config.repo, tag, 'gradle/versions.gradle')
   const packageDeps = parseVersionsGradle(versionsGradle)
-  const nativeDeps = await scanJNI(config.repo)
+  const nativeDeps = await scanJNI(config.repo, tag)
 
   return {
     client: config,

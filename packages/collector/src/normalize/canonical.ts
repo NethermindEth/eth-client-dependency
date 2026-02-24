@@ -40,7 +40,9 @@ let _index: Map<string, string> | null = null
 
 export function lookupCanonical(purlOrNativeName: string): string | undefined {
   if (!_index) _index = buildIndex()
-  return _index.get(purlOrNativeName)
+  // Try exact match first, then strip @version suffix (canonical.yaml stores unversioned PURLs)
+  const unversioned = purlOrNativeName.replace(/@[^@]+$/, '')
+  return _index.get(purlOrNativeName) ?? _index.get(unversioned)
 }
 
 export function getCanonicalLibs(): Record<string, CanonicalLib> {

@@ -49,10 +49,10 @@ export async function getDepsData(): Promise<DepsData> {
   // In development, try to read local file first
   if (process.env.NODE_ENV === 'development') {
     try {
-      const { readFileSync } = await import('fs')
+      const { readFile } = await import('fs/promises')
       const { join } = await import('path')
       const localPath = join(process.cwd(), '../../data/deps.json')
-      const content = readFileSync(localPath, 'utf-8')
+      const content = await readFile(localPath, 'utf-8')
       return JSON.parse(content) as DepsData
     } catch {
       // fall through to fetch
