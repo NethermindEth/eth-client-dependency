@@ -1,0 +1,12 @@
+{
+  "name": "eth-dependency",
+  "private": true,
+  "scripts": {
+    "collect": "pnpm --filter collector run collect",
+    "dev": "pnpm --filter dashboard run dev",
+    "build": "pnpm --filter dashboard run build"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.0"
+  }
+}

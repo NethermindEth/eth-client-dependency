@@ -1,0 +1,109 @@
+libraries:
+  libsecp256k1:
+    description: "Bitcoin Core's optimised ECDSA library for transaction signing"
+    category: crypto
+    purls:
+      - pkg:golang/github.com/decred/dcrd/dcrec/secp256k1
+      - pkg:golang/github.com/decred/dcrd/dcrec/secp256k1/v4
+      - pkg:golang/github.com/btcsuite/btcd
+      - pkg:golang/github.com/btcsuite/btcd/btcec/v2
+      - pkg:cargo/secp256k1
+      - pkg:cargo/secp256k1-sys
+      - pkg:cargo/k256
+      - pkg:cargo/libsecp256k1
+    native_names:
+      - secp256k1
+      - rustsecp256k1_v0_13
+      - rustsecp256k1_v0_10
+      - libsecp256k1
+
+  blst:
+    description: "BLS12-381 signature library by Supranational — used for validator attestations"
+    category: crypto
+    purls:
+      - pkg:golang/github.com/supranational/blst
+      - pkg:cargo/blst
+      - pkg:maven/tech.pegasys/jblst
+    native_names:
+      - blst
+
+  kzg:
+    description: "KZG polynomial commitment library — EIP-4844 blob transactions"
+    category: crypto
+    purls:
+      - pkg:cargo/c-kzg
+      - pkg:cargo/c-kzg-sys
+      - pkg:nuget/Ckzg.Bindings
+      - pkg:maven/io.consensys.protocols/jc-kzg-4844
+      - pkg:maven/io.github.crate-crypto/java-eth-kzg
+      - pkg:npm/c-kzg
+    native_names:
+      - ckzg
+      - c_kzg_4844
+
+  rocksdb:
+    description: "RocksDB embedded key-value store — primary storage engine"
+    category: storage
+    purls:
+      - pkg:cargo/rocksdb
+      - pkg:cargo/librocksdb-sys
+      - pkg:maven/org.rocksdb/rocksdbjni
+    native_names:
+      - rocksdb
+      - librocksdb
+
+  leveldb:
+    description: "LevelDB embedded key-value store"
+    category: storage
+    purls:
+      - pkg:golang/github.com/syndtr/goleveldb
+      - pkg:golang/github.com/ethereum/go-ethereum/ethdb/leveldb
+    native_names:
+      - leveldb
+
+  openssl:
+    description: "OpenSSL TLS/cryptography library"
+    category: crypto
+    purls:
+      - pkg:cargo/openssl
+      - pkg:cargo/openssl-sys
+    native_names:
+      - ssl
+      - crypto
+      - openssl
+
+  libp2p:
+    description: "Modular peer-to-peer networking framework"
+    category: networking
+    purls:
+      - pkg:golang/github.com/libp2p/go-libp2p
+      - pkg:cargo/libp2p
+      - pkg:maven/io.libp2p/jvm-libp2p
+      - pkg:npm/libp2p
+
+  snappy:
+    description: "Snappy compression library"
+    category: compression
+    purls:
+      - pkg:cargo/snappy-sys
+      - pkg:golang/github.com/golang/snappy
+    native_names:
+      - snappy
+
+  bouncycastle:
+    description: "Java cryptographic library"
+    category: crypto
+    purls:
+      - pkg:maven/org.bouncycastle/bcprov-jdk18on
+      - pkg:maven/org.bouncycastle/bcpkix-jdk18on
+      - pkg:maven/org.bouncycastle/bctls-jdk18on
+
+  protobuf:
+    description: "Protocol Buffers serialization"
+    category: serialization
+    purls:
+      - pkg:golang/google.golang.org/protobuf
+      - pkg:cargo/prost
+      - pkg:maven/com.google.protobuf/protobuf-java
+      - pkg:nuget/Google.Protobuf
+      - pkg:npm/protobufjs
