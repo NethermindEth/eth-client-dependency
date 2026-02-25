@@ -1,6 +1,7 @@
 import { parse as parseToml } from 'smol-toml'
 import { fetchRaw, getLatestTag } from '../lib/fetch.js'
 import { resolveNativeLibs } from '../lib/cratesio.js'
+import { collectCargoDevDeps } from '../lib/cargo.js'
 import type { ClientConfig, ClientResult, RawDep } from '../types.js'
 
 interface CargoLockPackage {
@@ -9,27 +10,9 @@ interface CargoLockPackage {
   source?: string
 }
 
-interface CargoToml {
-  'dev-dependencies'?: Record<string, unknown>
-  workspace?: {
-    'dev-dependencies'?: Record<string, unknown>
-  }
-}
-
 function parseCargoLock(content: string): CargoLockPackage[] {
   const parsed = parseToml(content) as { package?: CargoLockPackage[] }
   return parsed.package ?? []
-}
-
-function parseDevDeps(cargoTomlContent: string): Set<string> {
-  const parsed = parseToml(cargoTomlContent) as CargoToml
-  const devDeps = new Set<string>()
-  const direct = parsed['dev-dependencies'] ?? {}
-  const workspace = parsed.workspace?.['dev-dependencies'] ?? {}
-  for (const name of [...Object.keys(direct), ...Object.keys(workspace)]) {
-    devDeps.add(name)
-  }
-  return devDeps
 }
 
 export async function collectLighthouse(config: ClientConfig): Promise<ClientResult> {
@@ -40,7 +23,7 @@ export async function collectLighthouse(config: ClientConfig): Promise<ClientRes
   ])
 
   const packages = parseCargoLock(cargoLockContent)
-  const devDepNames = parseDevDeps(cargoTomlContent)
+  const devDepNames = await collectCargoDevDeps(config.repo, tag, cargoTomlContent)
 
   const packageDeps: RawDep[] = packages
     .filter(pkg => pkg.source != null)
@@ -79,8 +62,6 @@ export async function collectLighthouse(config: ClientConfig): Promise<ClientRes
     scannedAt: new Date().toISOString(),
     tagPinned: true,
     deps: [...packageDeps, ...nativeDeps],
-    limitations: [
-      'Cargo.lock dev dep filtering is approximate — workspace-level dev deps only',
-    ],
+    limitations: [],
   }
 }

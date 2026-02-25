@@ -27,13 +27,15 @@ function parsePnpmLockV9(content: string): RawDep[] {
   const deps: RawDep[] = []
   const seen = new Set<string>()
 
-  // Collect all dev dep names from all importers
+  // Collect all dev dep names from all importers.
+  // pnpm v9 importer version strings include peer-dep suffixes like "4.0.7(@types/node@24.10.1)"
+  // but the packages section keys are bare "name@version" — strip the suffix before comparing.
   const devPkgKeys = new Set<string>()
   if (lock.importers) {
     for (const importer of Object.values(lock.importers)) {
       for (const [name, info] of Object.entries(importer.devDependencies ?? {})) {
-        // pnpm v9 version key format: "name@version"
-        devPkgKeys.add(`${name}@${info.version}`)
+        const baseVersion = info.version.replace(/\(.*$/, '').trim()
+        devPkgKeys.add(`${name}@${baseVersion}`)
       }
     }
   }
@@ -70,8 +72,6 @@ export async function collectLodestar(config: ClientConfig): Promise<ClientResul
     scannedAt: new Date().toISOString(),
     tagPinned: true,
     deps,
-    limitations: [
-      'Dev dep classification is approximate for transitive deps',
-    ],
+    limitations: [],
   }
 }
