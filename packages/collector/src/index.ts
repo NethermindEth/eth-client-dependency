@@ -13,6 +13,7 @@ import { fetchNetworkShares } from './lib/networkShare.js'
 
 import { lookupCanonical } from './normalize/canonical.js'
 import { normalizePurl } from './normalize/purl.js'
+import { SYSTEM_LIBS } from './lib/search.js'
 
 import { collectGeth } from './clients/geth.js'
 import { collectErigon } from './clients/erigon.js'
@@ -25,7 +26,7 @@ import { collectTeku } from './clients/teku.js'
 import { collectNethermind } from './clients/nethermind.js'
 import { collectNimbus } from './clients/nimbus.js'
 
-import type { ClientConfig, ClientResult, NormalizedDep, FrequencyEntry, DepsOutput } from './types.js'
+import type { ClientConfig, ClientResult, NormalizedDep, FrequencyEntry, DepsOutput, SharedDep, EcosystemStat, NativeDepEntry } from './types.js'
 
 const collectors: Record<string, (config: ClientConfig) => Promise<ClientResult>> = {
   geth: collectGeth,
@@ -98,6 +99,151 @@ function computeFrequency(
   return frequency
 }
 
+// Maps PURL type prefix to human-readable ecosystem label.
+// 'npm' maps to 'typescript' because Lodestar is the only npm client and its
+// client.ecosystem is 'typescript' — aligning this keeps the Libraries and
+// Ecosystems pages consistent.
+const PURL_ECO_MAP: Record<string, string> = {
+  golang: 'go',
+  cargo: 'rust',
+  maven: 'java',
+  nuget: 'dotnet',
+  npm: 'typescript',
+  github: 'nim',
+}
+
+function purlToName(purl: string): string {
+  const path = purl
+    .replace(/^pkg:[^/]+\//, '')
+    .replace(/@[^@/]*$/, '')
+    .replace(/%40/g, '@')
+  const parts = path.split('/')
+  if (parts.length >= 2 && /^v\d+$/.test(parts[parts.length - 1])) {
+    return parts.slice(Math.max(0, parts.length - 3)).join('/')
+  }
+  return parts.slice(Math.max(0, parts.length - 2)).join('/')
+}
+
+function purlToEcosystem(purl: string): string {
+  const type = purl.split(':')[1]?.split('/')[0] ?? 'unknown'
+  return PURL_ECO_MAP[type] ?? type
+}
+
+function computeTopSharedDeps(
+  frequency: Record<string, FrequencyEntry>,
+  results: ClientResult[],
+): SharedDep[] {
+  const clientShares = new Map(results.map(r => [r.client.id, { el: r.client.elNetworkShare, cl: r.client.clNetworkShare }]))
+  const clientLayer = new Map(results.map(r => [r.client.id, r.client.layer]))
+
+  const groups = new Map<string, SharedDep>()
+  for (const [purl, entry] of Object.entries(frequency)) {
+    const groupKey = entry.canonicalId ?? purl
+    const existing = groups.get(groupKey)
+    if (!existing) {
+      groups.set(groupKey, {
+        purl,
+        name: entry.canonicalId ?? purlToName(purl),
+        ecosystem: entry.canonicalId ? 'cross-ecosystem' : purlToEcosystem(purl),
+        clients: [...entry.clients],
+        elCoverage: 0,
+        clCoverage: 0,
+        isCrossLayer: false,
+        canonicalId: entry.canonicalId,
+      })
+    } else {
+      for (const c of entry.clients) {
+        if (!existing.clients.includes(c)) existing.clients.push(c)
+      }
+    }
+  }
+
+  for (const group of groups.values()) {
+    let hasEL = false
+    let hasCL = false
+    for (const clientId of group.clients) {
+      const share = clientShares.get(clientId)
+      if (share) {
+        group.elCoverage += share.el
+        group.clCoverage += share.cl
+      }
+      const layer = clientLayer.get(clientId)
+      if (layer === 'EL') hasEL = true
+      if (layer === 'CL') hasCL = true
+    }
+    group.isCrossLayer = hasEL && hasCL
+  }
+
+  return Array.from(groups.values())
+    .filter(e => e.clients.length >= 2)
+    .sort((a, b) => b.clients.length - a.clients.length || (b.elCoverage + b.clCoverage) - (a.elCoverage + a.clCoverage))
+}
+
+function computeEcosystemStats(
+  frequency: Record<string, FrequencyEntry>,
+  results: ClientResult[],
+): Record<string, EcosystemStat> {
+  const stats: Record<string, EcosystemStat> = {}
+  const clientEco = new Map<string, string>()
+  for (const result of results) {
+    const eco = result.client.ecosystem
+    clientEco.set(result.client.id, eco)
+    if (!stats[eco]) stats[eco] = { clients: [], sharedDeps: 0, totalDeps: 0 }
+    stats[eco].clients.push(result.client.id)
+  }
+  for (const entry of Object.values(frequency)) {
+    const ecoClientCount = new Map<string, number>()
+    for (const id of entry.clients) {
+      const eco = clientEco.get(id)
+      if (eco) ecoClientCount.set(eco, (ecoClientCount.get(eco) ?? 0) + 1)
+    }
+    for (const [eco, count] of ecoClientCount) {
+      if (!stats[eco]) continue
+      stats[eco].totalDeps++
+      if (count >= 2) stats[eco].sharedDeps++
+    }
+  }
+  return stats
+}
+
+function computeNativeDeps(results: ClientResult[]): NativeDepEntry[] {
+  const nativeFreq: Record<string, NativeDepEntry> = {}
+  const clientLayer = new Map(results.map(r => [r.client.id, r.client.layer]))
+
+  for (const result of results) {
+    for (const dep of result.deps.filter(d => !d.isDev && d.depType === 'native')) {
+      const libName = dep.nativeLib ?? dep.name
+      if (SYSTEM_LIBS.has(libName.toLowerCase())) continue
+      const canonicalId = lookupCanonical(dep.purl) ?? lookupCanonical(libName)
+      const key = canonicalId ?? libName
+      if (!nativeFreq[key]) {
+        nativeFreq[key] = {
+          nativeLib: libName,
+          clients: [],
+          elCoverage: 0,
+          clCoverage: 0,
+          isCrossLayer: false,
+          ...(canonicalId ? { canonicalId } : {}),
+        }
+      }
+      const entry = nativeFreq[key]
+      if (!entry.clients.includes(result.client.id)) {
+        entry.clients.push(result.client.id)
+        entry.elCoverage += result.client.elNetworkShare
+        entry.clCoverage += result.client.clNetworkShare
+      }
+    }
+  }
+
+  for (const entry of Object.values(nativeFreq)) {
+    const hasEL = entry.clients.some(id => clientLayer.get(id) === 'EL')
+    const hasCL = entry.clients.some(id => clientLayer.get(id) === 'CL')
+    entry.isCrossLayer = hasEL && hasCL
+  }
+
+  return Object.values(nativeFreq).sort((a, b) => b.clients.length - a.clients.length)
+}
+
 function buildOutput(results: ClientResult[], frequency: Record<string, FrequencyEntry>, failedClients: Array<{ id: string; error: string }>, networkSharesSource: DepsOutput['networkSharesSource']): DepsOutput {
   const deps: Record<string, NormalizedDep[]> = {}
 
@@ -127,6 +273,9 @@ function buildOutput(results: ClientResult[], frequency: Record<string, Frequenc
     frequency,
     failedClients,
     networkSharesSource,
+    topSharedDeps: computeTopSharedDeps(frequency, results),
+    ecosystemStats: computeEcosystemStats(frequency, results),
+    nativeDeps: computeNativeDeps(results),
   }
 }
 

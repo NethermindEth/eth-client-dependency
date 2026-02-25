@@ -1,66 +1,12 @@
 export const dynamic = 'force-dynamic'
 
 import { getDepsData } from '@/lib/data'
-import { lookupNativeCanonical } from '@/lib/canonical'
 import Badge from '@/components/Badge'
 import CoverageBar from '@/components/CoverageBar'
 
 export default async function NativePage() {
   const data = await getDepsData()
-
-  // Collect all native deps across all clients
-  const nativeFreq: Record<string, {
-    clients: string[]
-    nativeLib: string
-    elCoverage: number
-    clCoverage: number
-    isCrossLayer: boolean
-    canonicalId?: string
-  }> = {}
-
-  // OS system libraries — always present, not meaningful external deps
-  const SYSTEM_LIBS = new Set([
-    'kernel32.dll', 'kernel32', 'ntdll.dll', 'ntdll',
-    'user32', 'advapi32', 'ole32', 'oleaut32', 'ws2_32',
-    'shell32', 'shlwapi', 'msvcrt', 'ucrtbase',
-    'libc', 'libm', 'libdl', 'libpthread', 'libstdc++',
-  ])
-
-  for (const [clientId, deps] of Object.entries(data.deps)) {
-    const client = data.clients.find(c => c.id === clientId)
-    if (!client) continue
-
-    for (const dep of deps.filter(d => d.depType === 'native' && !SYSTEM_LIBS.has(d.name.toLowerCase()))) {
-      const resolvedCanonical = dep.canonicalId ?? lookupNativeCanonical(dep.name)
-      const key = resolvedCanonical ?? dep.name
-      if (!nativeFreq[key]) {
-        nativeFreq[key] = {
-          clients: [],
-          nativeLib: dep.name,
-          elCoverage: 0,
-          clCoverage: 0,
-          isCrossLayer: false,
-          canonicalId: resolvedCanonical,
-        }
-      }
-      const entry = nativeFreq[key]
-      if (!entry.clients.includes(clientId)) {
-        entry.clients.push(clientId)
-        entry.elCoverage += client.elNetworkShare
-        entry.clCoverage += client.clNetworkShare
-      }
-    }
-  }
-
-  // Mark cross-layer
-  for (const entry of Object.values(nativeFreq)) {
-    const hasEL = entry.clients.some(id => data.clients.find(c => c.id === id)?.layer === 'EL')
-    const hasCL = entry.clients.some(id => data.clients.find(c => c.id === id)?.layer === 'CL')
-    entry.isCrossLayer = hasEL && hasCL
-  }
-
-  const sorted = Object.entries(nativeFreq)
-    .sort((a, b) => b[1].clients.length - a[1].clients.length)
+  const nativeDeps = data.nativeDeps ?? []
 
   return (
     <div className="space-y-6">
@@ -85,7 +31,7 @@ export default async function NativePage() {
       </div>
 
       {/* Native deps table */}
-      {sorted.length === 0 ? (
+      {nativeDeps.length === 0 ? (
         <div className="text-sm text-muted text-center py-8">
           No native dependencies detected yet. Run the collector with native scanning enabled.
         </div>
@@ -101,9 +47,9 @@ export default async function NativePage() {
               </tr>
             </thead>
             <tbody>
-              {sorted.map(([key, entry], i) => (
+              {nativeDeps.map((entry, i) => (
                 <tr
-                  key={key}
+                  key={entry.canonicalId ?? entry.nativeLib}
                   className={`border-b border-border/50 hover:bg-surface/50 ${i % 2 === 0 ? '' : 'bg-surface/20'}`}
                 >
                   <td className="px-4 py-2.5">

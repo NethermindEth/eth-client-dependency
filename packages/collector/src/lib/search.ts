@@ -80,8 +80,9 @@ export async function scanJNI(repo: string, tag: string): Promise<RawDep[]> {
   return nativeDeps
 }
 
-// Windows OS system DLLs — always present, not meaningful external deps
-const WINDOWS_SYSTEM_DLLS = new Set([
+// OS/system libraries — always present, not meaningful external deps.
+// Used both at scan time (scanDllImport) and at aggregation time (computeNativeDeps in index.ts).
+export const SYSTEM_LIBS = new Set([
   'kernel32.dll', 'kernel32', 'ntdll.dll', 'ntdll',
   'user32.dll', 'user32', 'advapi32.dll', 'advapi32',
   'ole32.dll', 'ole32', 'oleaut32.dll', 'oleaut32',
@@ -106,7 +107,7 @@ export async function scanDllImport(repo: string, tag: string): Promise<RawDep[]
       const matches = content.match(/\[(?:Dll|Library)Import\("([^"]+)"\)/g) ?? []
       for (const match of matches) {
         const lib = match.match(/"([^"]+)"/)?.[1]
-        if (lib && !seen.has(lib) && !WINDOWS_SYSTEM_DLLS.has(lib.toLowerCase())) {
+        if (lib && !seen.has(lib) && !SYSTEM_LIBS.has(lib.toLowerCase())) {
           seen.add(lib)
           nativeDeps.push({
             name: lib,

@@ -1,13 +1,15 @@
 export const dynamic = 'force-dynamic'
 
 import { getDepsData } from '@/lib/data'
-import { getTopSharedDeps } from '@/lib/stats'
 import Badge from '@/components/Badge'
 import CoverageBar from '@/components/CoverageBar'
 
+const TABLE_LIMIT = 500
+
 export default async function LibrariesPage() {
   const data = await getDepsData()
-  const deps = getTopSharedDeps(data, 500)
+  const allDeps = data.topSharedDeps ?? []
+  const deps = allDeps.slice(0, TABLE_LIMIT)
   const totalShared = Object.values(data.frequency).filter(f => f.clients.length >= 2).length
 
   // Heatmap: clients × top shared deps (top 30)
@@ -48,7 +50,7 @@ export default async function LibrariesPage() {
             </thead>
             <tbody>
               {heatmapDeps.map((dep, i) => (
-                <tr key={dep.purl} className={`border-b border-border/50 ${i % 2 === 0 ? '' : 'bg-surface/20'}`}>
+                <tr key={dep.canonicalId ?? dep.purl} className={`border-b border-border/50 ${i % 2 === 0 ? '' : 'bg-surface/20'}`}>
                   <td className="px-3 py-1.5">
                     <div className="flex items-center gap-1.5">
                       <span className="font-mono text-text truncate max-w-40" title={dep.purl}>
@@ -88,6 +90,11 @@ export default async function LibrariesPage() {
       <div>
         <h2 className="text-sm font-semibold text-muted uppercase tracking-wider mb-3">
           All shared dependencies
+          {allDeps.length > TABLE_LIMIT && (
+            <span className="ml-2 normal-case font-normal text-muted">
+              (showing top {TABLE_LIMIT} of {allDeps.length})
+            </span>
+          )}
         </h2>
         <div className="border border-border rounded overflow-x-auto">
           <table className="w-full text-sm min-w-[520px]">
@@ -102,7 +109,7 @@ export default async function LibrariesPage() {
             <tbody>
               {deps.map((dep, i) => (
                 <tr
-                  key={dep.purl}
+                  key={dep.canonicalId ?? dep.purl}
                   className={`border-b border-border/50 hover:bg-surface/50 ${i % 2 === 0 ? '' : 'bg-surface/20'}`}
                 >
                   <td className="px-4 py-2">

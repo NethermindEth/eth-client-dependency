@@ -33,11 +33,43 @@ export interface FrequencyEntry {
   canonicalId?: string
 }
 
+// These three interfaces mirror packages/collector/src/types.ts — keep them in sync.
+export interface SharedDep {
+  purl: string
+  name: string
+  ecosystem: string
+  clients: string[]
+  elCoverage: number
+  clCoverage: number
+  isCrossLayer: boolean
+  canonicalId?: string
+}
+
+export interface EcosystemStat {
+  clients: string[]
+  totalDeps: number
+  sharedDeps: number
+}
+
+export interface NativeDepEntry {
+  nativeLib: string
+  canonicalId?: string
+  clients: string[]
+  elCoverage: number
+  clCoverage: number
+  isCrossLayer: boolean
+}
+
 export interface DepsData {
   generatedAt: string
   clients: ClientMeta[]
   deps: Record<string, Dep[]>
   frequency: Record<string, FrequencyEntry>
+  failedClients?: Array<{ id: string; error: string }>
+  // Pre-computed aggregates — populated by the collector, absent in stale data files.
+  topSharedDeps?: SharedDep[]
+  ecosystemStats?: Record<string, EcosystemStat>
+  nativeDeps?: NativeDepEntry[]
 }
 
 // In dev, fall back to local file. In production, fetch from GitHub.
@@ -59,9 +91,9 @@ export async function getDepsData(): Promise<DepsData> {
     }
   }
 
-  const res = await fetch(DATA_URL, {
-    next: { revalidate: 3600 }, // revalidate every hour
-  })
+  // force-dynamic on every page means this always runs server-side per request;
+  // no revalidate hint needed — data freshness is controlled by the daily CI cron.
+  const res = await fetch(DATA_URL, { cache: 'no-store' })
   if (!res.ok) throw new Error(`Failed to fetch deps data: ${res.status}`)
   return res.json() as Promise<DepsData>
 }

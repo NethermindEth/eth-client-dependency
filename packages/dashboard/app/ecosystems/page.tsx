@@ -1,7 +1,6 @@
 export const dynamic = 'force-dynamic'
 
 import { getDepsData } from '@/lib/data'
-import { getEcosystemStats } from '@/lib/stats'
 import Badge from '@/components/Badge'
 import EcosystemChart from '@/components/EcosystemChart'
 
@@ -16,7 +15,7 @@ const ECO_COLORS: Record<string, string> = {
 
 export default async function EcosystemsPage() {
   const data = await getDepsData()
-  const stats = getEcosystemStats(data)
+  const stats = data.ecosystemStats ?? {}
 
   const chartData = Object.entries(stats).map(([eco, s]) => ({
     ecosystem: eco,

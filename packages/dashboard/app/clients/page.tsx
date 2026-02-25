@@ -1,14 +1,23 @@
 export const dynamic = 'force-dynamic'
 
 import { getDepsData } from '@/lib/data'
+import type { SharedDep } from '@/lib/data'
 import Badge from '@/components/Badge'
 import CoverageBar from '@/components/CoverageBar'
 
 export default async function ClientsPage() {
   const data = await getDepsData()
 
-  // Build a map from canonicalId -> all client IDs that have any dep in that canonical group.
-  // This lets us detect cross-ecosystem sharing (e.g. pkg:nuget/BouncyCastle ↔ pkg:maven/bcprov).
+  // Build canonical → merged SharedDep lookup so we can show consistent
+  // coverage numbers matching the Libraries/Overview pages (issue #6).
+  const sharedDepByCanonical = new Map<string, SharedDep>()
+  const sharedDepByPurl = new Map<string, SharedDep>()
+  for (const sd of data.topSharedDeps ?? []) {
+    if (sd.canonicalId) sharedDepByCanonical.set(sd.canonicalId, sd)
+    sharedDepByPurl.set(sd.purl, sd)
+  }
+
+  // Build canonicalId → all client IDs (for cross-ecosystem "shared" detection).
   const canonicalClientMap = new Map<string, string[]>()
   for (const freq of Object.values(data.frequency)) {
     if (!freq.canonicalId) continue
@@ -35,9 +44,10 @@ export default async function ClientsPage() {
           const packageDeps = clientDeps.filter(d => d.depType === 'package')
           const nativeDeps = clientDeps.filter(d => d.depType === 'native')
 
-          // A dep is "shared" if its PURL is used by 2+ clients directly,
-          // OR if its canonicalId maps to a group used by 2+ clients (cross-ecosystem).
-          const sharedDeps = clientDeps.filter(dep => {
+          // Only consider package deps for "shared" — native deps are shown separately
+          // and are already aggregated in the Native page. Including them here would
+          // cause double-display (issue #8).
+          const sharedDeps = packageDeps.filter(dep => {
             const freq = data.frequency[dep.purl]
             if (!freq) return false
             if (freq.clients.length >= 2) return true
@@ -88,6 +98,15 @@ export default async function ClientsPage() {
                         ? (canonicalClientMap.get(freq.canonicalId) ?? freq.clients)
                         : freq.clients
                       const otherClients = effectiveClients.filter(id => id !== client.id)
+
+                      // Use merged canonical group coverage for consistency with
+                      // Libraries/Overview pages (issue #6).
+                      const mergedDep = freq.canonicalId
+                        ? sharedDepByCanonical.get(freq.canonicalId)
+                        : sharedDepByPurl.get(dep.purl)
+                      const displayEl = mergedDep?.elCoverage ?? freq.elCoverage
+                      const displayCl = mergedDep?.clCoverage ?? freq.clCoverage
+
                       return (
                         <div key={dep.purl} className="flex items-center gap-3 text-xs">
                           <span className="font-mono text-text truncate w-64" title={dep.purl}>{dep.name}</span>
@@ -100,7 +119,7 @@ export default async function ClientsPage() {
                               return <Badge key={id} label={id} variant={c?.layer === 'EL' ? 'el' : 'cl'} />
                             })}
                           </div>
-                          <CoverageBar el={freq.elCoverage} cl={freq.clCoverage} />
+                          <CoverageBar el={displayEl} cl={displayCl} />
                         </div>
                       )
                     })}

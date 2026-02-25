@@ -47,6 +47,37 @@ export interface FrequencyEntry {
   canonicalId?: string
 }
 
+// Pre-aggregated dep entry for the shared-deps table (grouped by canonicalId where applicable).
+// Mirrored in packages/dashboard/lib/data.ts — keep both in sync.
+export interface SharedDep {
+  purl: string
+  name: string
+  ecosystem: string
+  clients: string[]
+  elCoverage: number
+  clCoverage: number
+  isCrossLayer: boolean
+  canonicalId?: string
+}
+
+// Per-ecosystem sharing statistics. Mirrored in packages/dashboard/lib/data.ts — keep both in sync.
+export interface EcosystemStat {
+  clients: string[]
+  totalDeps: number
+  sharedDeps: number
+}
+
+// Aggregated native library entry (grouped across clients, system libs excluded).
+// Mirrored in packages/dashboard/lib/data.ts — keep both in sync.
+export interface NativeDepEntry {
+  nativeLib: string
+  canonicalId?: string
+  clients: string[]
+  elCoverage: number
+  clCoverage: number
+  isCrossLayer: boolean
+}
+
 export interface DepsOutput {
   generatedAt: string
   clients: Array<ClientConfig & {
@@ -65,4 +96,8 @@ export interface DepsOutput {
     clAsOf?: string
     clEpochs?: [number, number]
   }
+  // Pre-computed aggregates — eliminate per-request computation in the dashboard
+  topSharedDeps: SharedDep[]
+  ecosystemStats: Record<string, EcosystemStat>
+  nativeDeps: NativeDepEntry[]
 }
