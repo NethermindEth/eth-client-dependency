@@ -59,9 +59,10 @@ export interface DepsOutput {
   frequency: Record<string, FrequencyEntry>
   failedClients: Array<{ id: string; error: string }>
   networkSharesSource: {
-    elSource: 'ethernodes' | 'hardcoded'
-    clSource: 'blockprint' | 'hardcoded'
+    elSource: 'migalabs' | 'ethernodes' | 'hardcoded'
+    clSource: 'migalabs' | 'blockprint' | 'hardcoded'
     elAsOf?: string
+    clAsOf?: string
     clEpochs?: [number, number]
   }
 }

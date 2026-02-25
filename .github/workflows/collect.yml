@@ -30,6 +30,7 @@ jobs:
       - name: Run collector
         env:
           GITHUB_TOKEN: ${{ secrets.COLLECTOR_GITHUB_TOKEN }}
+          MIGA_API_TOKEN: ${{ secrets.MIGA_API_TOKEN }}
         run: pnpm collect
 
       - name: Commit updated deps.json

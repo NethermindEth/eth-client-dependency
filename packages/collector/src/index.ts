@@ -1,7 +1,12 @@
-import 'dotenv/config'
+import { config as dotenvConfig } from 'dotenv'
+import { resolve } from 'path'
+import { fileURLToPath } from 'url'
 import { writeFileSync, renameSync, mkdirSync } from 'fs'
 import { join, dirname } from 'path'
-import { fileURLToPath } from 'url'
+
+// Load .env from the repo root (3 dirs up from packages/collector/src/)
+// Falls through silently in CI where vars are injected directly
+dotenvConfig({ path: resolve(dirname(fileURLToPath(import.meta.url)), '../../../.env') })
 
 import { CLIENTS } from './config.js'
 import { fetchNetworkShares } from './lib/networkShare.js'
