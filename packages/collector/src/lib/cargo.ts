@@ -31,7 +31,7 @@ export async function collectCargoDevDeps(
   // Workspace member dev deps — fetch all member Cargo.toml files in parallel
   const members = (root.workspace?.members ?? [])
     .map(p => p.replace(/\/\*$/, '').replace(/\/$/, '').trim())
-    .filter(p => p.length > 0 && !p.includes('*'))  // skip glob entries
+    .filter(p => p.length > 0 && !/[*?]/.test(p))  // skip glob entries
 
   const results = await Promise.allSettled(
     members.map(async (memberPath) => {

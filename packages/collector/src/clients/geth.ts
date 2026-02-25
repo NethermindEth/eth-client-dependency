@@ -1,62 +1,7 @@
 import { fetchRaw, getLatestTag } from '../lib/fetch.js'
+import { parseGoSum, parseGoModReplacements } from '../lib/gosum.js'
 import { scanCGO } from '../lib/search.js'
-import type { ClientConfig, ClientResult, RawDep } from '../types.js'
-
-// Parse go.sum into RawDep[]
-// Format: "module version hash" — skip /go.mod lines
-function parseGoSum(content: string, selfModule: string): RawDep[] {
-  const deps: RawDep[] = []
-  const seen = new Set<string>()
-
-  for (const line of content.split('\n')) {
-    const trimmed = line.trim()
-    if (!trimmed) continue
-
-    const parts = trimmed.split(' ')
-    if (parts.length < 3) continue
-
-    const [mod, version] = parts
-    if (!mod || !version) continue
-    if (version.endsWith('/go.mod')) continue  // skip go.mod hash lines
-    if (mod.startsWith(selfModule)) continue  // skip self-references
-
-    const purl = `pkg:golang/${mod}@${version}`
-    if (seen.has(purl)) continue
-    seen.add(purl)
-
-    deps.push({
-      name: mod,
-      version,
-      purl,
-      isDev: false,
-      depType: 'package',
-    })
-  }
-
-  return deps
-}
-
-// Parse replace directives from go.mod
-// e.g. "github.com/old/pkg => github.com/new/pkg v1.0.0"
-function parseGoModReplacements(content: string): Map<string, string> {
-  const replacements = new Map<string, string>()
-  const replaceBlock = content.match(/replace\s*\(([^)]+)\)/s)?.[1] ?? ''
-  const inlineReplace = [...content.matchAll(/^replace\s+(\S+)\s+=>\s+(\S+)\s+(\S+)/gm)]
-
-  const lines = [
-    ...replaceBlock.split('\n'),
-    ...inlineReplace.map(m => `${m[1]} => ${m[2]} ${m[3]}`),
-  ]
-
-  for (const line of lines) {
-    const match = line.trim().match(/^(\S+)(?:\s+\S+)?\s+=>\s+(\S+)\s+(\S+)/)
-    if (match) {
-      replacements.set(match[1], `${match[2]}@${match[3]}`)
-    }
-  }
-
-  return replacements
-}
+import type { ClientConfig, ClientResult } from '../types.js'
 
 export async function collectGeth(config: ClientConfig): Promise<ClientResult> {
   const tag = await getLatestTag(config.repo)
@@ -68,7 +13,7 @@ export async function collectGeth(config: ClientConfig): Promise<ClientResult> {
   const packageDeps = parseGoSum(gosum, 'github.com/ethereum/go-ethereum')
   const replacements = parseGoModReplacements(gomod)
 
-  // Apply replace directives
+  // Apply replace directives — Geth uses these to redirect some imports
   for (const dep of packageDeps) {
     const replacement = replacements.get(dep.name)
     if (replacement) {

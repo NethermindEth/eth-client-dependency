@@ -51,7 +51,6 @@ const SKIP_PATH_PREFIXES = [
   'vendor/nim-eth2-scenarios',
   'vendor/gnosis',
   'vendor/sepolia',
-  'vendor/holesky',
 ]
 
 export async function collectNimbus(config: ClientConfig): Promise<ClientResult> {

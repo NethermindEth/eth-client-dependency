@@ -8,7 +8,6 @@ interface CargoLockPackage {
   name: string
   version: string
   source?: string
-  dependencies?: string[]
 }
 
 function parseCargoLock(content: string): CargoLockPackage[] {

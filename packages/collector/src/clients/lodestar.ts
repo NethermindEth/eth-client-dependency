@@ -48,9 +48,7 @@ function parsePnpmLockV9(content: string): RawDep[] {
 
     const [, name, version] = match
     const isDev = devPkgKeys.has(`${name}@${version}`)
-    const purl = name.startsWith('@')
-      ? `pkg:npm/${name}@${version}`
-      : `pkg:npm/${name}@${version}`
+    const purl = `pkg:npm/${name}@${version}`
 
     if (seen.has(purl)) continue
     seen.add(purl)

@@ -2,24 +2,18 @@ import { fetchRaw, getLatestTag } from '../lib/fetch.js'
 import { scanJNI } from '../lib/search.js'
 import type { ClientConfig, ClientResult, RawDep } from '../types.js'
 
-// Test-only scopes in Gradle — exclude these
-const DEV_SCOPES = ['testImplementation', 'testRuntimeOnly', 'testCompileOnly', 'testFixturesImplementation']
-
-// Parse gradle/versions.gradle — Teku's centralized version management file
+// Parse gradle/versions.gradle — Teku's centralized version management file.
+// versions.gradle contains only version declarations with no scope info (no testImplementation etc.),
+// so all deps are treated as production. Transitive deps are not available.
 // Two patterns:
-//   dependency 'group:artifact:version'
+//   dependency 'group:artifact:version'    (single quotes or double quotes)
 //   dependencySet(group: 'group', version: 'ver') { entry 'artifact' }
 function parseVersionsGradle(content: string): RawDep[] {
   const deps: RawDep[] = []
   const seen = new Set<string>()
 
-  // Detect if a line is inside a dev scope block
-  // Simple heuristic: skip entries from known test dependency blocks
-  const isTestScope = DEV_SCOPES.some(scope => content.includes(scope))
-  void isTestScope  // versions.gradle doesn't have scope info — all entries are version declarations
-
-  // Pattern 1: dependency 'group:artifact:version'
-  const singleMatches = content.matchAll(/dependency\s+'([^:]+):([^:]+):([^']+)'/g)
+  // Pattern 1: dependency 'group:artifact:version' or "group:artifact:version"
+  const singleMatches = content.matchAll(/dependency\s+['"]([^:'"]+):([^:'"]+):([^'"]+)['"]/g)
   for (const match of singleMatches) {
     const [, group, artifact, version] = match
     const purl = `pkg:maven/${group}/${artifact}@${version}`
@@ -29,10 +23,10 @@ function parseVersionsGradle(content: string): RawDep[] {
   }
 
   // Pattern 2: dependencySet(group: 'group', version: 'ver') { entry 'artifact' ... }
-  const setMatches = content.matchAll(/dependencySet\s*\(\s*group\s*:\s*'([^']+)',\s*version\s*:\s*'([^']+)'\s*\)\s*\{([^}]+)\}/gs)
+  const setMatches = content.matchAll(/dependencySet\s*\(\s*group\s*:\s*['"]([^'"]+)['"]\s*,\s*version\s*:\s*['"]([^'"]+)['"]\s*\)\s*\{([^}]+)\}/gs)
   for (const match of setMatches) {
     const [, group, version, block] = match
-    const entries = block.matchAll(/entry\s+'([^']+)'/g)
+    const entries = block.matchAll(/entry\s+['"]([^'"]+)['"]/g)
     for (const entry of entries) {
       const artifact = entry[1]
       const purl = `pkg:maven/${group}/${artifact}@${version}`
