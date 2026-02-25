@@ -7,6 +7,21 @@ import CoverageBar from '@/components/CoverageBar'
 export default async function ClientsPage() {
   const data = await getDepsData()
 
+  // Build a map from canonicalId -> all client IDs that have any dep in that canonical group.
+  // This lets us detect cross-ecosystem sharing (e.g. pkg:nuget/BouncyCastle ↔ pkg:maven/bcprov).
+  const canonicalClientMap = new Map<string, string[]>()
+  for (const freq of Object.values(data.frequency)) {
+    if (!freq.canonicalId) continue
+    const existing = canonicalClientMap.get(freq.canonicalId)
+    if (!existing) {
+      canonicalClientMap.set(freq.canonicalId, [...freq.clients])
+    } else {
+      for (const id of freq.clients) {
+        if (!existing.includes(id)) existing.push(id)
+      }
+    }
+  }
+
   return (
     <div className="space-y-6">
       <div>
@@ -20,10 +35,17 @@ export default async function ClientsPage() {
           const packageDeps = clientDeps.filter(d => d.depType === 'package')
           const nativeDeps = clientDeps.filter(d => d.depType === 'native')
 
-          // Find deps shared with other clients
+          // A dep is "shared" if its PURL is used by 2+ clients directly,
+          // OR if its canonicalId maps to a group used by 2+ clients (cross-ecosystem).
           const sharedDeps = clientDeps.filter(dep => {
             const freq = data.frequency[dep.purl]
-            return freq && freq.clients.length >= 2
+            if (!freq) return false
+            if (freq.clients.length >= 2) return true
+            if (freq.canonicalId) {
+              const canonClients = canonicalClientMap.get(freq.canonicalId) ?? []
+              return canonClients.length >= 2
+            }
+            return false
           })
 
           return (
@@ -61,10 +83,17 @@ export default async function ClientsPage() {
                   <div className="space-y-1.5 max-h-64 overflow-y-auto">
                     {sharedDeps.slice(0, 30).map(dep => {
                       const freq = data.frequency[dep.purl]!
-                      const otherClients = freq.clients.filter(id => id !== client.id)
+                      // Use canonical-group clients if available, else direct PURL clients
+                      const effectiveClients = freq.canonicalId
+                        ? (canonicalClientMap.get(freq.canonicalId) ?? freq.clients)
+                        : freq.clients
+                      const otherClients = effectiveClients.filter(id => id !== client.id)
                       return (
                         <div key={dep.purl} className="flex items-center gap-3 text-xs">
                           <span className="font-mono text-text truncate w-64" title={dep.purl}>{dep.name}</span>
+                          {freq.canonicalId && (
+                            <Badge label={freq.canonicalId} variant="cross" />
+                          )}
                           <div className="flex gap-1">
                             {otherClients.map(id => {
                               const c = data.clients.find(x => x.id === id)
