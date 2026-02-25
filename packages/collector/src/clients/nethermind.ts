@@ -1,4 +1,3 @@
-import { XMLParser } from 'fast-xml-parser'
 import { fetchRaw, getLatestTag } from '../lib/fetch.js'
 import { scanDllImport } from '../lib/search.js'
 import type { ClientConfig, ClientResult, RawDep } from '../types.js'
@@ -19,69 +18,65 @@ function isDevPackage(name: string): boolean {
   return DEV_PACKAGE_PATTERNS.some(p => p.test(name))
 }
 
-interface PackageVersionElement {
-  '@_Include': string
-  '@_Version': string
+// packages.lock.json entry for each resolved NuGet package
+interface PackagesLockEntry {
+  type: 'Direct' | 'Transitive' | 'Project'
+  resolved?: string
+  requested?: string
+  contentHash?: string
 }
 
-interface DirectoryPackagesProps {
-  Project: {
-    ItemGroup: Array<{
-      PackageVersion?: PackageVersionElement[]
-    }> | {
-      PackageVersion?: PackageVersionElement[]
-    }
-  }
+interface PackagesLock {
+  version: number
+  dependencies: Record<string, Record<string, PackagesLockEntry>>
 }
 
-// Parse Directory.Packages.props — NuGet central package management
-function parseDirectoryPackagesProps(content: string): RawDep[] {
-  const parser = new XMLParser({
-    ignoreAttributes: false,
-    attributeNamePrefix: '@_',
-    isArray: (name) => ['ItemGroup', 'PackageVersion'].includes(name),
-  })
-  const parsed = parser.parse(content) as DirectoryPackagesProps
+// Parse NuGet packages.lock.json — full transitive dep graph per target framework.
+// Picks the framework target with the most resolved packages (usually net10.0).
+// Skips Project-type entries (workspace references).
+function parsePackagesLock(content: string): RawDep[] {
+  const lock = JSON.parse(content) as PackagesLock
   const deps: RawDep[] = []
   const seen = new Set<string>()
 
-  const project = parsed.Project
-  if (!project) return deps
+  const frameworks = Object.values(lock.dependencies ?? {})
+  if (frameworks.length === 0) return deps
 
-  const itemGroups = Array.isArray(project.ItemGroup) ? project.ItemGroup : [project.ItemGroup]
+  // Use the largest framework target — avoids picking a tiny test-only TFM
+  const frameworkDeps = frameworks.reduce((best, cur) =>
+    Object.keys(cur).length > Object.keys(best).length ? cur : best
+  )
 
-  for (const group of itemGroups) {
-    const packages = group?.PackageVersion ?? []
-    for (const pkg of packages) {
-      const name = pkg['@_Include']
-      const version = pkg['@_Version']
-      if (!name || !version) continue
+  for (const [name, entry] of Object.entries(frameworkDeps)) {
+    if (entry.type === 'Project') continue   // workspace references
+    const version = entry.resolved
+    if (!version) continue
 
-      // Strip version range brackets e.g. [7.2.0]
-      const cleanVersion = version.replace(/^\[|\]$/g, '')
-      const purl = `pkg:nuget/${name}@${cleanVersion}`
-      if (seen.has(purl)) continue
-      seen.add(purl)
+    const purl = `pkg:nuget/${name}@${version}`
+    if (seen.has(purl)) continue
+    seen.add(purl)
 
-      deps.push({
-        name,
-        version: cleanVersion,
-        purl,
-        isDev: isDevPackage(name),
-        depType: 'package',
-      })
-    }
+    deps.push({
+      name,
+      version,
+      purl,
+      isDev: isDevPackage(name),
+      depType: 'package',
+    })
   }
 
   return deps
 }
 
+// packages.lock.json path for Nethermind.Runner (the main executable project)
+const PACKAGES_LOCK_PATH = 'src/Nethermind/Nethermind.Runner/packages.lock.json'
+
 export async function collectNethermind(config: ClientConfig): Promise<ClientResult> {
   const tag = await getLatestTag(config.repo)
 
   // Nethermind's NethermindEth org has SAML SSO on GitHub API — use raw.githubusercontent.com
-  const propsContent = await fetchRaw(config.repo, tag, 'Directory.Packages.props')
-  const packageDeps = parseDirectoryPackagesProps(propsContent)
+  const lockContent = await fetchRaw(config.repo, tag, PACKAGES_LOCK_PATH)
+  const packageDeps = parsePackagesLock(lockContent)
   const nativeDeps = await scanDllImport(config.repo, tag)
 
   return {
@@ -90,9 +85,6 @@ export async function collectNethermind(config: ClientConfig): Promise<ClientRes
     scannedAt: new Date().toISOString(),
     tagPinned: true,
     deps: [...packageDeps, ...nativeDeps],
-    limitations: [
-      'Direct dependencies only — no packages.lock.json exists in repo',
-      'Transitive deps not resolved',
-    ],
+    limitations: [],
   }
 }

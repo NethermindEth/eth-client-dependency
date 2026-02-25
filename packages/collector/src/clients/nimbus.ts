@@ -1,4 +1,4 @@
-import { fetchRaw, getLatestTag } from '../lib/fetch.js'
+import { fetchRaw, getLatestTag, fetchDirContents } from '../lib/fetch.js'
 import type { ClientConfig, ClientResult, RawDep } from '../types.js'
 
 interface Submodule {
@@ -58,16 +58,29 @@ export async function collectNimbus(config: ClientConfig): Promise<ClientResult>
   const tag = await getLatestTag(config.repo)
   const gitModulesContent = await fetchRaw(config.repo, tag, '.gitmodules')
   const submodules = parseGitModules(gitModulesContent)
+  const filtered = submodules.filter(s => !SKIP_PATH_PREFIXES.some(prefix => s.path.startsWith(prefix)))
 
-  const deps: RawDep[] = submodules
-    .filter(s => !SKIP_PATH_PREFIXES.some(prefix => s.path.startsWith(prefix)))
-    .map(s => ({
-      name: submoduleToName(s.path),
-      version: s.branch ?? 'master',
-      purl: urlToPurl(s.url, s.path),
-      isDev: false,
-      depType: 'package' as const,
-    }))
+  // Fetch vendor/ directory contents via GitHub Contents API to get pinned commit SHAs.
+  // Each submodule entry in the directory listing has a `sha` field — the exact commit pinned.
+  const shaByPath = new Map<string, string>()
+  try {
+    const vendorEntries = await fetchDirContents(config.repo, tag, 'vendor')
+    for (const entry of vendorEntries) {
+      if (entry.type === 'submodule') {
+        shaByPath.set(entry.path, entry.sha)
+      }
+    }
+  } catch {
+    // If the API call fails, fall back to branch names below
+  }
+
+  const deps: RawDep[] = filtered.map(s => ({
+    name: submoduleToName(s.path),
+    version: shaByPath.get(s.path) ?? s.branch ?? 'unknown',
+    purl: urlToPurl(s.url, s.path),
+    isDev: false,
+    depType: 'package' as const,
+  }))
 
   return {
     client: config,
@@ -77,7 +90,6 @@ export async function collectNimbus(config: ClientConfig): Promise<ClientResult>
     deps,
     limitations: [
       'Direct dependencies only — Nim ecosystem uses git submodules, no transitive resolution',
-      'Version is tracking branch name, not pinned commit hash',
       'pkg:github// PURLs do not match Go/Rust/Java PURLs — cross-client sharing is 0 even for equivalent libraries (e.g. nim-libp2p ↔ go-libp2p)',
     ],
   }

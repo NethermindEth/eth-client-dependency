@@ -89,6 +89,29 @@ export async function searchCode(repo: string, query: string): Promise<string[]>
   })
 }
 
+export interface GitHubContentEntry {
+  name: string
+  path: string
+  type: 'file' | 'dir' | 'submodule' | 'symlink'
+  sha: string
+  submodule_git_url?: string
+}
+
+// List directory contents via GitHub Contents API — returns entries including submodules with their pinned SHAs
+export async function fetchDirContents(repo: string, ref: string, path: string): Promise<GitHubContentEntry[]> {
+  const url = `https://api.github.com/repos/${repo}/contents/${path}?ref=${ref}`
+  return withRetry(async () => {
+    const res = await fetch(url, { headers: githubHeaders() })
+    if (!res.ok) {
+      const err = new Error(`fetchDirContents failed: ${res.status} ${url}`) as any
+      err.status = res.status
+      throw err
+    }
+    const data = await res.json()
+    return Array.isArray(data) ? (data as GitHubContentEntry[]) : []
+  })
+}
+
 // Fetch raw content of a specific file via GitHub API (used when raw.githubusercontent.com is insufficient)
 export async function fetchViaApi(repo: string, ref: string, path: string): Promise<string> {
   const url = `https://api.github.com/repos/${repo}/contents/${path}?ref=${ref}`
