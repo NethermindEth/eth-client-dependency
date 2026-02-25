@@ -58,4 +58,10 @@ export interface DepsOutput {
   deps: Record<string, NormalizedDep[]>
   frequency: Record<string, FrequencyEntry>
   failedClients: Array<{ id: string; error: string }>
+  networkSharesSource: {
+    elSource: 'ethernodes' | 'hardcoded'
+    clSource: 'blockprint' | 'hardcoded'
+    elAsOf?: string
+    clEpochs?: [number, number]
+  }
 }

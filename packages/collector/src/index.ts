@@ -4,6 +4,8 @@ import { join, dirname } from 'path'
 import { fileURLToPath } from 'url'
 
 import { CLIENTS } from './config.js'
+import { fetchNetworkShares } from './lib/networkShare.js'
+
 import { lookupCanonical } from './normalize/canonical.js'
 import { normalizePurl } from './normalize/purl.js'
 
@@ -56,6 +58,7 @@ function computeFrequency(
   results: ClientResult[],
 ): Record<string, FrequencyEntry> {
   const frequency: Record<string, FrequencyEntry> = {}
+  const clientLayer = new Map(results.map(r => [r.client.id, r.client.layer]))
 
   for (const result of results) {
     const prodDeps = result.deps.filter(d => !d.isDev)
@@ -80,8 +83,8 @@ function computeFrequency(
 
   // Mark cross-layer and attach canonical IDs
   for (const [purl, entry] of Object.entries(frequency)) {
-    const hasEL = entry.clients.some(id => CLIENTS.find(c => c.id === id)?.layer === 'EL')
-    const hasCL = entry.clients.some(id => CLIENTS.find(c => c.id === id)?.layer === 'CL')
+    const hasEL = entry.clients.some(id => clientLayer.get(id) === 'EL')
+    const hasCL = entry.clients.some(id => clientLayer.get(id) === 'CL')
     entry.isCrossLayer = hasEL && hasCL
     const canonicalId = lookupCanonical(purl)
     if (canonicalId) entry.canonicalId = canonicalId
@@ -90,7 +93,7 @@ function computeFrequency(
   return frequency
 }
 
-function buildOutput(results: ClientResult[], frequency: Record<string, FrequencyEntry>, failedClients: Array<{ id: string; error: string }>): DepsOutput {
+function buildOutput(results: ClientResult[], frequency: Record<string, FrequencyEntry>, failedClients: Array<{ id: string; error: string }>, networkSharesSource: DepsOutput['networkSharesSource']): DepsOutput {
   const deps: Record<string, NormalizedDep[]> = {}
 
   for (const result of results) {
@@ -118,6 +121,7 @@ function buildOutput(results: ClientResult[], frequency: Record<string, Frequenc
     deps,
     frequency,
     failedClients,
+    networkSharesSource,
   }
 }
 
@@ -129,11 +133,25 @@ async function main() {
     throw new Error('GITHUB_TOKEN environment variable is required')
   }
 
+  // Fetch live network shares (falls back to hardcoded values per client if unavailable)
+  console.log('Fetching network share data...')
+  const { shares: liveShares, ...networkSharesSource } = await fetchNetworkShares()
+
+  // Merge live shares into client configs (fall back to hardcoded value if live fetch returned 0)
+  const clients = CLIENTS.map(c => {
+    const live = liveShares.get(c.id)
+    return {
+      ...c,
+      elNetworkShare: (live?.el ?? 0) > 0 ? live!.el : c.elNetworkShare,
+      clNetworkShare: (live?.cl ?? 0) > 0 ? live!.cl : c.clNetworkShare,
+    }
+  })
+
   const results: ClientResult[] = []
   const failedClients: Array<{ id: string; error: string }> = []
 
   // Run collectors sequentially to respect rate limits
-  for (const client of CLIENTS) {
+  for (const client of clients) {
     const { result, error } = await runCollector(client)
     if (result) {
       results.push(result)
@@ -149,11 +167,11 @@ async function main() {
     }
   }
 
-  console.log(`\nCollected ${results.length}/${CLIENTS.length} clients`)
+  console.log(`\nCollected ${results.length}/${clients.length} clients`)
   console.log('Computing frequency...')
 
   const frequency = computeFrequency(results)
-  const output = buildOutput(results, frequency, failedClients)
+  const output = buildOutput(results, frequency, failedClients, networkSharesSource)
 
   // Write to data/deps.json atomically (tmp + rename) to avoid partial writes on kill
   const __dirname = dirname(fileURLToPath(import.meta.url))
