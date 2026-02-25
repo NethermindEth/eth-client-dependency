@@ -43,7 +43,7 @@ export interface DepsData {
 // In dev, fall back to local file. In production, fetch from GitHub.
 const DATA_URL =
   process.env.NEXT_PUBLIC_DATA_URL ??
-  'https://raw.githubusercontent.com/your-org/eth-dependency/main/data/deps.json'
+  'https://raw.githubusercontent.com/NethermindEth/eth-client-dependency/main/data/deps.json'
 
 export async function getDepsData(): Promise<DepsData> {
   // In development, try to read local file first
