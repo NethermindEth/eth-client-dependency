@@ -7,3 +7,4 @@ node_modules/
 dist/
 *.tsbuildinfo
 packages/dashboard/test-results/
+.vercel
