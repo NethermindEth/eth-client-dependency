@@ -34,13 +34,56 @@ export function getTopSharedDeps(
   data: DepsData,
   limit = 50,
 ): Array<FrequencyEntry & { purl: string; name: string; ecosystem: string }> {
-  return Object.entries(data.frequency)
-    .map(([purl, entry]) => ({
-      purl,
-      name: purlToName(purl),
-      ecosystem: purlToEcosystem(purl),
-      ...entry,
-    }))
+  // Build client→share and client→layer lookups for coverage recomputation
+  const clientShares = new Map(
+    data.clients.map(c => [c.id, { el: c.elNetworkShare, cl: c.clNetworkShare }])
+  )
+  const clientLayer = new Map(data.clients.map(c => [c.id, c.layer]))
+
+  type MergedEntry = FrequencyEntry & { purl: string; name: string; ecosystem: string }
+
+  // Group by canonicalId (cross-ecosystem merge) or by purl for uncanonicalized entries
+  const groups = new Map<string, MergedEntry>()
+
+  for (const [purl, entry] of Object.entries(data.frequency)) {
+    const groupKey = entry.canonicalId ?? purl
+    const existing = groups.get(groupKey)
+    if (!existing) {
+      groups.set(groupKey, {
+        purl,
+        name: entry.canonicalId ?? purlToName(purl),
+        ecosystem: entry.canonicalId ? 'cross-ecosystem' : purlToEcosystem(purl),
+        clients: [...entry.clients],
+        elCoverage: 0,   // recomputed below
+        clCoverage: 0,   // recomputed below
+        isCrossLayer: false,
+        canonicalId: entry.canonicalId,
+      })
+    } else {
+      for (const c of entry.clients) {
+        if (!existing.clients.includes(c)) existing.clients.push(c)
+      }
+    }
+  }
+
+  // Recompute coverage from deduplicated client lists
+  for (const group of groups.values()) {
+    let hasEL = false
+    let hasCL = false
+    for (const clientId of group.clients) {
+      const share = clientShares.get(clientId)
+      if (share) {
+        group.elCoverage += share.el
+        group.clCoverage += share.cl
+      }
+      const layer = clientLayer.get(clientId)
+      if (layer === 'EL') hasEL = true
+      if (layer === 'CL') hasCL = true
+    }
+    group.isCrossLayer = hasEL && hasCL
+  }
+
+  return Array.from(groups.values())
     .filter(e => e.clients.length >= 2)
     .sort((a, b) => b.clients.length - a.clients.length || b.elCoverage + b.clCoverage - (a.elCoverage + a.clCoverage))
     .slice(0, limit)

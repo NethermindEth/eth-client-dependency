@@ -26,6 +26,8 @@ libraries:
       - pkg:golang/github.com/supranational/blst
       - pkg:cargo/blst
       - pkg:maven/tech.pegasys/jblst
+      - pkg:npm/@chainsafe/blst          # Lodestar: Node.js NAPI bindings to blst
+      - pkg:github/status-im/nim-blscurve  # Nimbus: Nim wrapper around blst
     native_names:
       - blst
 
