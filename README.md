@@ -21,24 +21,26 @@ A critical vulnerability in a shared dependency can simultaneously affect multip
 | [Nimbus](https://github.com/status-im/nimbus-eth2) | CL | Nim | 12% of validators |
 | [Lodestar](https://github.com/ChainSafe/lodestar) | CL | TypeScript | 7% of validators |
 
+Network shares are fetched live from the Migalabs API on each collection run and fall back to the hardcoded values above.
+
 ## Dashboard pages
 
-- **Overview** — top shared dependencies sorted by client count, with EL/CL coverage bars
-- **Libraries** — dependency matrix heatmap + full shared dep table with cross-ecosystem canonical grouping
-- **Clients** — per-client breakdown showing shared deps and limitations
-- **Ecosystems** — within-ecosystem sharing rate by language (Go, Rust, Java, etc.)
+- **Overview** — top shared dependencies sorted by client count, with EL/CL coverage bars; warns when a collection run had failures
+- **Libraries** — dependency matrix heatmap + full shared dep table (up to 500 rows) with cross-ecosystem canonical grouping
+- **Clients** — per-client breakdown showing shared package deps and native deps, with consistent coverage numbers
+- **Ecosystems** — within-ecosystem sharing rate by language (Go, Rust, Java, TypeScript, etc.)
 - **Native Deps** — C/C++ libraries detected via CGO directives, JNI calls, `-sys` crates, and P/Invoke attributes
 
 ## Architecture
 
 ```
-packages/collector/   TypeScript CLI — fetches lock files from GitHub, detects native deps
-packages/dashboard/   Next.js 15 app — visualises data/deps.json
+packages/collector/   TypeScript CLI — fetches lock files from GitHub, detects native deps, writes deps.json
+packages/dashboard/   Next.js 15 app — reads data/deps.json (server components, force-dynamic)
 data/deps.json        Output of collector, input of dashboard (committed daily by CI)
 mappings/canonical.yaml  Cross-ecosystem library identity mappings
 ```
 
-The collector fetches dependency data directly from each client's source repository using the GitHub API, then normalises everything to [PURLs](https://github.com/package-url/purl-spec). A GitHub Actions cron job runs it daily and commits the updated `deps.json`.
+The collector fetches dependency data directly from each client's source repository using the GitHub API, normalises everything to [PURLs](https://github.com/package-url/purl-spec), and pre-computes all aggregates the dashboard needs. A GitHub Actions cron job runs it daily and commits the updated `deps.json`. The dashboard reads pre-computed data with no per-request computation over large tables.
 
 ### Lock file sources
 
@@ -47,10 +49,10 @@ The collector fetches dependency data directly from each client's source reposit
 | Geth, Erigon, Prysm | `go.sum` | Full transitive |
 | Reth, Lighthouse | `Cargo.lock` | Full transitive |
 | Lodestar | `pnpm-lock.yaml` | Full transitive |
-| Besu | `gradle/verification-metadata.xml` | Full transitive (928 components) |
+| Besu | `gradle/verification-metadata.xml` | Full transitive (~928 components) |
+| Nethermind | `src/Nethermind/Nethermind.Runner/packages.lock.json` | Full transitive (~194 NuGet deps) |
 | Teku | `gradle/versions.gradle` | Direct only |
-| Nethermind | `Directory.Packages.props` | Direct only |
-| Nimbus | `.gitmodules` | Git submodules (`pkg:github//` PURLs) |
+| Nimbus | `.gitmodules` + GitHub Contents API | Git submodules (`pkg:github//` PURLs, pinned SHAs) |
 
 ### Native dependency detection
 
@@ -61,9 +63,21 @@ Native (C/C++) libraries are detected statically from source:
 - **Java** — `System.loadLibrary()` calls scanned in source
 - **C#** — `[DllImport]` / `[LibraryImport]` attributes scanned in source
 
+OS system libraries (`libc`, `kernel32`, `ntdll`, etc.) are filtered out at both scan time and aggregation time using a single shared `SYSTEM_LIBS` set.
+
 ### Cross-ecosystem canonical mapping
 
-`mappings/canonical.yaml` maps equivalent libraries across ecosystems. For example, `rocksdb` appears as `pkg:cargo/rocksdb` in Reth/Lighthouse and `pkg:maven/org.rocksdb/rocksdbjni` in Besu — the canonical ID `rocksdb` links them. Current mappings: `libsecp256k1`, `blst`, `kzg`, `rocksdb`, `leveldb`, `openssl`, `libp2p`, `snappy`, `bouncycastle`, `protobuf`.
+`mappings/canonical.yaml` maps equivalent libraries across ecosystems. For example, `rocksdb` appears as `pkg:cargo/rocksdb` in Reth/Lighthouse and `pkg:maven/org.rocksdb/rocksdbjni` in Besu — the canonical ID `rocksdb` links them, and both are merged into a single row in the Libraries table. Current mappings: `libsecp256k1`, `blst`, `kzg`, `rocksdb`, `leveldb`, `openssl`, `libp2p`, `snappy`, `bouncycastle`, `protobuf`.
+
+### Pre-computed aggregates
+
+The collector writes three aggregates into `deps.json` on every run, so the dashboard reads them directly with no per-request computation:
+
+- **`topSharedDeps`** — all deps shared by 2+ clients, grouped by `canonicalId`, sorted by client count
+- **`ecosystemStats`** — per-ecosystem sharing rates (total deps, shared deps, client list)
+- **`nativeDeps`** — native library entries aggregated across clients, system libs excluded
+
+If a collection run has client failures, `failedClients` lists them and the dashboard shows a warning banner.
 
 ## Running locally
 
@@ -102,7 +116,7 @@ pnpm dev       # http://localhost:3000
 pnpm build     # production build
 ```
 
-In development, the dashboard reads `data/deps.json` from the local filesystem. In production it fetches from `NEXT_PUBLIC_DATA_URL` (set to the raw GitHub URL of `data/deps.json`).
+In development, the dashboard reads `data/deps.json` from the local filesystem. In production it fetches from `NEXT_PUBLIC_DATA_URL` (defaults to the raw GitHub URL of `data/deps.json`).
 
 ## CI
 
@@ -119,13 +133,13 @@ gh workflow run collect.yml --repo NethermindEth/eth-client-dependency
 1. Add a `ClientConfig` entry to `packages/collector/src/config.ts`
 2. Create `packages/collector/src/clients/<name>.ts` exporting `collectX(config): Promise<ClientResult>`
 3. Register it in the `collectors` map in `packages/collector/src/index.ts`
-4. If the client uses a new package manager, add the PURL type → ecosystem mapping in `packages/dashboard/lib/stats.ts` (`PURL_ECO_MAP`)
+4. If the client uses a new package manager, add the PURL type → ecosystem mapping to `PURL_ECO_MAP` in `packages/collector/src/index.ts`
 
 ## Known limitations
 
 | Limitation | Reason |
 |------------|--------|
-| Teku & Nethermind: direct deps only | No lock file in repo |
+| Teku: direct deps only | No lock file in repo |
 | Nimbus: `pkg:github//` PURLs don't cross-match | Nim has no package registry PURL type |
 | Indirect CGO / transitive native deps | Requires running the actual build |
 | `dlopen` / runtime-loaded libs | Determined at runtime, not statically |
