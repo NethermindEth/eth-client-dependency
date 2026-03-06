@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-03-05T04:41:15.662Z",
+  "generatedAt": "2026-03-06T04:40:29.569Z",
   "clients": [
     {
       "id": "geth",
@@ -10,7 +10,7 @@
       "elNetworkShare": 0.5012586849259894,
       "clNetworkShare": 0,
       "scannedTag": "v1.17.1",
-      "scannedAt": "2026-03-05T04:39:38.542Z",
+      "scannedAt": "2026-03-06T04:38:46.335Z",
       "tagPinned": true,
       "limitations": []
     },
@@ -23,7 +23,7 @@
       "elNetworkShare": 0.25455643943208134,
       "clNetworkShare": 0,
       "scannedTag": "1.36.0",
-      "scannedAt": "2026-03-05T04:39:47.461Z",
+      "scannedAt": "2026-03-06T04:38:55.295Z",
       "tagPinned": true,
       "limitations": []
     },
@@ -36,7 +36,7 @@
       "elNetworkShare": 0.09445171684623906,
       "clNetworkShare": 0,
       "scannedTag": "26.2.0",
-      "scannedAt": "2026-03-05T04:39:47.979Z",
+      "scannedAt": "2026-03-06T04:38:56.206Z",
       "tagPinned": true,
       "limitations": []
     },
@@ -49,7 +49,7 @@
       "elNetworkShare": 0.06525022656328668,
       "clNetworkShare": 0,
       "scannedTag": "v3.3.8",
-      "scannedAt": "2026-03-05T04:40:11.566Z",
+      "scannedAt": "2026-03-06T04:39:26.429Z",
       "tagPinned": true,
       "limitations": []
     },
@@ -62,7 +62,7 @@
       "elNetworkShare": 0.07672943308830933,
       "clNetworkShare": 0,
       "scannedTag": "v1.11.1",
-      "scannedAt": "2026-03-05T04:40:43.667Z",
+      "scannedAt": "2026-03-06T04:39:58.235Z",
       "tagPinned": true,
       "limitations": []
     },
@@ -75,7 +75,7 @@
       "elNetworkShare": 0,
       "clNetworkShare": 0.37739287144573486,
       "scannedTag": "v8.1.1",
-      "scannedAt": "2026-03-05T04:41:14.143Z",
+      "scannedAt": "2026-03-06T04:40:27.838Z",
       "tagPinned": true,
       "limitations": []
     },
@@ -88,7 +88,7 @@
       "elNetworkShare": 0,
       "clNetworkShare": 0.49783740488586303,
       "scannedTag": "v7.1.2",
-      "scannedAt": "2026-03-05T04:41:14.734Z",
+      "scannedAt": "2026-03-06T04:40:28.558Z",
       "tagPinned": true,
       "limitations": [
         "Prysm uses Bazel as primary build system; go.sum reflects Go module deps only"
@@ -102,8 +102,8 @@
       "ecosystem": "java",
       "elNetworkShare": 0,
       "clNetworkShare": 0.024128954745694833,
-      "scannedTag": "26.2.0",
-      "scannedAt": "2026-03-05T04:41:15.044Z",
+      "scannedTag": "26.3.0",
+      "scannedAt": "2026-03-06T04:40:28.904Z",
       "tagPinned": true,
       "limitations": [
         "Direct dependencies only — no Gradle lock file exists in repo",
@@ -119,7 +119,7 @@
       "elNetworkShare": 0,
       "clNetworkShare": 0.004325190228273929,
       "scannedTag": "v1.40.0",
-      "scannedAt": "2026-03-05T04:41:15.326Z",
+      "scannedAt": "2026-03-06T04:40:29.197Z",
       "tagPinned": true,
       "limitations": []
     },
@@ -132,7 +132,7 @@
       "elNetworkShare": 0,
       "clNetworkShare": 0.05100120144173008,
       "scannedTag": "v26.3.0",
-      "scannedAt": "2026-03-05T04:41:15.633Z",
+      "scannedAt": "2026-03-06T04:40:29.541Z",
       "tagPinned": true,
       "limitations": [
         "Direct dependencies only — Nim ecosystem uses git submodules, no transitive resolution",
@@ -25724,16 +25724,16 @@
     ],
     "teku": [
       {
-        "purl": "pkg:maven/com.fasterxml.jackson.core/jackson-databind@2.20.1",
+        "purl": "pkg:maven/com.fasterxml.jackson.core/jackson-databind@2.21.0",
         "name": "com.fasterxml.jackson.core:jackson-databind",
-        "version": "2.20.1",
+        "version": "2.21.0",
         "ecosystem": "maven",
         "depType": "package"
       },
       {
-        "purl": "pkg:maven/com.fasterxml.jackson.module/jackson-module-kotlin@2.20.1",
+        "purl": "pkg:maven/com.fasterxml.jackson.module/jackson-module-kotlin@2.21.0",
         "name": "com.fasterxml.jackson.module:jackson-module-kotlin",
-        "version": "2.20.1",
+        "version": "2.21.0",
         "ecosystem": "maven",
         "depType": "package"
       },
@@ -25759,16 +25759,16 @@
         "depType": "package"
       },
       {
-        "purl": "pkg:maven/org.jsoup/jsoup@1.21.2",
+        "purl": "pkg:maven/org.jsoup/jsoup@1.22.1",
         "name": "org.jsoup:jsoup",
-        "version": "1.21.2",
+        "version": "1.22.1",
         "ecosystem": "maven",
         "depType": "package"
       },
       {
-        "purl": "pkg:maven/com.launchdarkly/okhttp-eventsource@4.1.1",
+        "purl": "pkg:maven/com.launchdarkly/okhttp-eventsource@4.2.0",
         "name": "com.launchdarkly:okhttp-eventsource",
-        "version": "4.1.1",
+        "version": "4.2.0",
         "ecosystem": "maven",
         "depType": "package"
       },
@@ -25796,9 +25796,9 @@
         "canonicalId": "blst"
       },
       {
-        "purl": "pkg:maven/io.consensys.protocols/jc-kzg-4844@2.1.5",
+        "purl": "pkg:maven/io.consensys.protocols/jc-kzg-4844@2.1.6",
         "name": "io.consensys.protocols:jc-kzg-4844",
-        "version": "2.1.5",
+        "version": "2.1.6",
         "ecosystem": "maven",
         "depType": "package",
         "canonicalId": "kzg"
@@ -25833,9 +25833,9 @@
         "depType": "package"
       },
       {
-        "purl": "pkg:maven/org.webjars/swagger-ui@5.27.1",
+        "purl": "pkg:maven/org.webjars/swagger-ui@5.31.0",
         "name": "org.webjars:swagger-ui",
-        "version": "5.27.1",
+        "version": "5.31.0",
         "ecosystem": "maven",
         "depType": "package"
       },
@@ -25903,9 +25903,9 @@
         "depType": "package"
       },
       {
-        "purl": "pkg:maven/org.assertj/assertj-core@3.27.4",
+        "purl": "pkg:maven/org.assertj/assertj-core@3.27.7",
         "name": "org.assertj:assertj-core",
-        "version": "3.27.4",
+        "version": "3.27.7",
         "ecosystem": "maven",
         "depType": "package"
       },
@@ -25981,9 +25981,9 @@
         "depType": "package"
       },
       {
-        "purl": "pkg:maven/tech.pegasys.discovery/discovery@25.4.0",
+        "purl": "pkg:maven/tech.pegasys.discovery/discovery@26.2.0",
         "name": "tech.pegasys.discovery:discovery",
-        "version": "25.4.0",
+        "version": "26.2.0",
         "ecosystem": "maven",
         "depType": "package"
       },
@@ -25995,16 +25995,16 @@
         "depType": "package"
       },
       {
-        "purl": "pkg:maven/com.fasterxml.jackson.dataformat/jackson-dataformat-yaml@2.20.1",
+        "purl": "pkg:maven/com.fasterxml.jackson.dataformat/jackson-dataformat-yaml@2.21.0",
         "name": "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml",
-        "version": "2.20.1",
+        "version": "2.21.0",
         "ecosystem": "maven",
         "depType": "package"
       },
       {
-        "purl": "pkg:maven/com.fasterxml.jackson.dataformat/jackson-dataformat-toml@2.20.1",
+        "purl": "pkg:maven/com.fasterxml.jackson.dataformat/jackson-dataformat-toml@2.21.0",
         "name": "com.fasterxml.jackson.dataformat:jackson-dataformat-toml",
-        "version": "2.20.1",
+        "version": "2.21.0",
         "ecosystem": "maven",
         "depType": "package"
       },
@@ -26107,16 +26107,16 @@
         "depType": "package"
       },
       {
-        "purl": "pkg:maven/io.netty/netty-handler@4.2.9.Final",
+        "purl": "pkg:maven/io.netty/netty-handler@4.2.10.Final",
         "name": "io.netty:netty-handler",
-        "version": "4.2.9.Final",
+        "version": "4.2.10.Final",
         "ecosystem": "maven",
         "depType": "package"
       },
       {
-        "purl": "pkg:maven/io.netty/netty-codec-http@4.2.9.Final",
+        "purl": "pkg:maven/io.netty/netty-codec-http@4.2.10.Final",
         "name": "io.netty:netty-codec-http",
-        "version": "4.2.9.Final",
+        "version": "4.2.10.Final",
         "ecosystem": "maven",
         "depType": "package"
       },
@@ -26221,16 +26221,16 @@
         "depType": "package"
       },
       {
-        "purl": "pkg:maven/org.mockito/mockito-core@5.19.0",
+        "purl": "pkg:maven/org.mockito/mockito-core@5.21.0",
         "name": "org.mockito:mockito-core",
-        "version": "5.19.0",
+        "version": "5.21.0",
         "ecosystem": "maven",
         "depType": "package"
       },
       {
-        "purl": "pkg:maven/org.mockito/mockito-junit-jupiter@5.19.0",
+        "purl": "pkg:maven/org.mockito/mockito-junit-jupiter@5.21.0",
         "name": "org.mockito:mockito-junit-jupiter",
-        "version": "5.19.0",
+        "version": "5.21.0",
         "ecosystem": "maven",
         "depType": "package"
       },
@@ -26277,72 +26277,72 @@
         "depType": "package"
       },
       {
-        "purl": "pkg:maven/org.hyperledger.besu.internal/besu-metrics-core@25.11.0",
+        "purl": "pkg:maven/org.hyperledger.besu.internal/besu-metrics-core@26.1.0",
         "name": "org.hyperledger.besu.internal:besu-metrics-core",
-        "version": "25.11.0",
+        "version": "26.1.0",
         "ecosystem": "maven",
         "depType": "package"
       },
       {
-        "purl": "pkg:maven/org.hyperledger.besu.internal/besu-ethereum-core@25.11.0",
+        "purl": "pkg:maven/org.hyperledger.besu.internal/besu-ethereum-core@26.1.0",
         "name": "org.hyperledger.besu.internal:besu-ethereum-core",
-        "version": "25.11.0",
+        "version": "26.1.0",
         "ecosystem": "maven",
         "depType": "package"
       },
       {
-        "purl": "pkg:maven/org.hyperledger.besu.internal/besu-config@25.11.0",
+        "purl": "pkg:maven/org.hyperledger.besu.internal/besu-config@26.1.0",
         "name": "org.hyperledger.besu.internal:besu-config",
-        "version": "25.11.0",
+        "version": "26.1.0",
         "ecosystem": "maven",
         "depType": "package"
       },
       {
-        "purl": "pkg:maven/org.hyperledger.besu/besu-datatypes@25.11.0",
+        "purl": "pkg:maven/org.hyperledger.besu/besu-datatypes@26.1.0",
         "name": "org.hyperledger.besu:besu-datatypes",
-        "version": "25.11.0",
+        "version": "26.1.0",
         "ecosystem": "maven",
         "depType": "package"
       },
       {
-        "purl": "pkg:maven/org.hyperledger.besu/besu-evm@25.11.0",
+        "purl": "pkg:maven/org.hyperledger.besu/besu-evm@26.1.0",
         "name": "org.hyperledger.besu:besu-evm",
-        "version": "25.11.0",
+        "version": "26.1.0",
         "ecosystem": "maven",
         "depType": "package"
       },
       {
-        "purl": "pkg:maven/org.hyperledger.besu/besu-plugin-api@25.11.0",
+        "purl": "pkg:maven/org.hyperledger.besu/besu-plugin-api@26.1.0",
         "name": "org.hyperledger.besu:besu-plugin-api",
-        "version": "25.11.0",
+        "version": "26.1.0",
         "ecosystem": "maven",
         "depType": "package"
       },
       {
-        "purl": "pkg:maven/org.testcontainers/testcontainers@1.21.3",
+        "purl": "pkg:maven/org.testcontainers/testcontainers@1.21.4",
         "name": "org.testcontainers:testcontainers",
-        "version": "1.21.3",
+        "version": "1.21.4",
         "ecosystem": "maven",
         "depType": "package"
       },
       {
-        "purl": "pkg:maven/org.testcontainers/junit-jupiter@1.21.3",
+        "purl": "pkg:maven/org.testcontainers/junit-jupiter@1.21.4",
         "name": "org.testcontainers:junit-jupiter",
-        "version": "1.21.3",
+        "version": "1.21.4",
         "ecosystem": "maven",
         "depType": "package"
       },
       {
-        "purl": "pkg:maven/org.jupnp/org.jupnp@3.0.3",
+        "purl": "pkg:maven/org.jupnp/org.jupnp@3.0.4",
         "name": "org.jupnp:org.jupnp",
-        "version": "3.0.3",
+        "version": "3.0.4",
         "ecosystem": "maven",
         "depType": "package"
       },
       {
-        "purl": "pkg:maven/org.jupnp/org.jupnp.support@3.0.3",
+        "purl": "pkg:maven/org.jupnp/org.jupnp.support@3.0.4",
         "name": "org.jupnp:org.jupnp.support",
-        "version": "3.0.3",
+        "version": "3.0.4",
         "ecosystem": "maven",
         "depType": "package"
       },
@@ -41491,11 +41491,12 @@
     },
     "pkg:maven/io.consensys.protocols/jc-kzg-4844@2.1.6": {
       "clients": [
-        "besu"
+        "besu",
+        "teku"
       ],
       "elCoverage": 0.09445171684623906,
-      "clCoverage": 0,
-      "isCrossLayer": false,
+      "clCoverage": 0.024128954745694833,
+      "isCrossLayer": true,
       "canonicalId": "kzg"
     },
     "pkg:maven/io.consensys.tuweni/tuweni-bytes@2.7.0": {
@@ -42255,11 +42256,12 @@
     },
     "pkg:maven/io.netty/netty-codec-http@4.2.10.Final": {
       "clients": [
-        "besu"
+        "besu",
+        "teku"
       ],
       "elCoverage": 0.09445171684623906,
-      "clCoverage": 0,
-      "isCrossLayer": false
+      "clCoverage": 0.024128954745694833,
+      "isCrossLayer": true
     },
     "pkg:maven/io.netty/netty-codec-http2@4.1.112.Final": {
       "clients": [
@@ -42447,11 +42449,12 @@
     },
     "pkg:maven/io.netty/netty-handler@4.2.10.Final": {
       "clients": [
-        "besu"
+        "besu",
+        "teku"
       ],
       "elCoverage": 0.09445171684623906,
-      "clCoverage": 0,
-      "isCrossLayer": false
+      "clCoverage": 0.024128954745694833,
+      "isCrossLayer": true
     },
     "pkg:maven/io.netty/netty-handler-proxy@4.1.115.Final": {
       "clients": [
@@ -46386,23 +46389,14 @@
     },
     "pkg:maven/org.jupnp/org.jupnp@3.0.3": {
       "clients": [
-        "besu",
-        "teku"
+        "besu"
       ],
       "elCoverage": 0.09445171684623906,
-      "clCoverage": 0.024128954745694833,
-      "isCrossLayer": true
+      "clCoverage": 0,
+      "isCrossLayer": false
     },
     "pkg:maven/org.jupnp/org.jupnp@3.0.4": {
       "clients": [
-        "besu"
-      ],
-      "elCoverage": 0.09445171684623906,
-      "clCoverage": 0,
-      "isCrossLayer": false
-    },
-    "pkg:maven/org.jupnp/org.jupnp.support@3.0.3": {
-      "clients": [
         "besu",
         "teku"
       ],
@@ -46410,13 +46404,22 @@
       "clCoverage": 0.024128954745694833,
       "isCrossLayer": true
     },
-    "pkg:maven/org.jupnp/org.jupnp.support@3.0.4": {
+    "pkg:maven/org.jupnp/org.jupnp.support@3.0.3": {
       "clients": [
         "besu"
       ],
       "elCoverage": 0.09445171684623906,
       "clCoverage": 0,
       "isCrossLayer": false
+    },
+    "pkg:maven/org.jupnp/org.jupnp.support@3.0.4": {
+      "clients": [
+        "besu",
+        "teku"
+      ],
+      "elCoverage": 0.09445171684623906,
+      "clCoverage": 0.024128954745694833,
+      "isCrossLayer": true
     },
     "pkg:maven/org.jupnp.pom/bundles@3.0.3": {
       "clients": [
@@ -47447,11 +47450,12 @@
     },
     "pkg:maven/tech.pegasys.discovery/discovery@26.2.0": {
       "clients": [
-        "besu"
+        "besu",
+        "teku"
       ],
       "elCoverage": 0.09445171684623906,
-      "clCoverage": 0,
-      "isCrossLayer": false
+      "clCoverage": 0.024128954745694833,
+      "isCrossLayer": true
     },
     "pkg:maven/tools.profiler/async-profiler@4.0": {
       "clients": [
@@ -61696,7 +61700,7 @@
       "clCoverage": 0.49783740488586303,
       "isCrossLayer": false
     },
-    "pkg:maven/com.fasterxml.jackson.core/jackson-databind@2.20.1": {
+    "pkg:maven/com.fasterxml.jackson.core/jackson-databind@2.21.0": {
       "clients": [
         "teku"
       ],
@@ -61704,7 +61708,7 @@
       "clCoverage": 0.024128954745694833,
       "isCrossLayer": false
     },
-    "pkg:maven/com.fasterxml.jackson.module/jackson-module-kotlin@2.20.1": {
+    "pkg:maven/com.fasterxml.jackson.module/jackson-module-kotlin@2.21.0": {
       "clients": [
         "teku"
       ],
@@ -61728,7 +61732,7 @@
       "clCoverage": 0.024128954745694833,
       "isCrossLayer": false
     },
-    "pkg:maven/org.jsoup/jsoup@1.21.2": {
+    "pkg:maven/org.jsoup/jsoup@1.22.1": {
       "clients": [
         "teku"
       ],
@@ -61736,7 +61740,7 @@
       "clCoverage": 0.024128954745694833,
       "isCrossLayer": false
     },
-    "pkg:maven/com.launchdarkly/okhttp-eventsource@4.1.1": {
+    "pkg:maven/com.launchdarkly/okhttp-eventsource@4.2.0": {
       "clients": [
         "teku"
       ],
@@ -61761,15 +61765,6 @@
       "clCoverage": 0.024128954745694833,
       "isCrossLayer": false,
       "canonicalId": "blst"
-    },
-    "pkg:maven/io.consensys.protocols/jc-kzg-4844@2.1.5": {
-      "clients": [
-        "teku"
-      ],
-      "elCoverage": 0,
-      "clCoverage": 0.024128954745694833,
-      "isCrossLayer": false,
-      "canonicalId": "kzg"
     },
     "pkg:maven/io.github.crate-crypto/java-eth-kzg@0.8.0": {
       "clients": [
@@ -61796,7 +61791,7 @@
       "clCoverage": 0.024128954745694833,
       "isCrossLayer": false
     },
-    "pkg:maven/org.webjars/swagger-ui@5.27.1": {
+    "pkg:maven/org.webjars/swagger-ui@5.31.0": {
       "clients": [
         "teku"
       ],
@@ -61836,7 +61831,7 @@
       "clCoverage": 0.024128954745694833,
       "isCrossLayer": false
     },
-    "pkg:maven/org.assertj/assertj-core@3.27.4": {
+    "pkg:maven/org.assertj/assertj-core@3.27.7": {
       "clients": [
         "teku"
       ],
@@ -61909,7 +61904,7 @@
       "clCoverage": 0.024128954745694833,
       "isCrossLayer": false
     },
-    "pkg:maven/tech.pegasys.discovery/discovery@25.4.0": {
+    "pkg:maven/com.fasterxml.jackson.dataformat/jackson-dataformat-yaml@2.21.0": {
       "clients": [
         "teku"
       ],
@@ -61917,15 +61912,7 @@
       "clCoverage": 0.024128954745694833,
       "isCrossLayer": false
     },
-    "pkg:maven/com.fasterxml.jackson.dataformat/jackson-dataformat-yaml@2.20.1": {
-      "clients": [
-        "teku"
-      ],
-      "elCoverage": 0,
-      "clCoverage": 0.024128954745694833,
-      "isCrossLayer": false
-    },
-    "pkg:maven/com.fasterxml.jackson.dataformat/jackson-dataformat-toml@2.20.1": {
+    "pkg:maven/com.fasterxml.jackson.dataformat/jackson-dataformat-toml@2.21.0": {
       "clients": [
         "teku"
       ],
@@ -62037,22 +62024,6 @@
       "clCoverage": 0.024128954745694833,
       "isCrossLayer": false
     },
-    "pkg:maven/io.netty/netty-handler@4.2.9.Final": {
-      "clients": [
-        "teku"
-      ],
-      "elCoverage": 0,
-      "clCoverage": 0.024128954745694833,
-      "isCrossLayer": false
-    },
-    "pkg:maven/io.netty/netty-codec-http@4.2.9.Final": {
-      "clients": [
-        "teku"
-      ],
-      "elCoverage": 0,
-      "clCoverage": 0.024128954745694833,
-      "isCrossLayer": false
-    },
     "pkg:maven/io.consensys.tuweni/tuweni-ssz@2.7.2": {
       "clients": [
         "teku"
@@ -62093,7 +62064,7 @@
       "clCoverage": 0.024128954745694833,
       "isCrossLayer": false
     },
-    "pkg:maven/org.mockito/mockito-core@5.19.0": {
+    "pkg:maven/org.mockito/mockito-core@5.21.0": {
       "clients": [
         "teku"
       ],
@@ -62101,7 +62072,7 @@
       "clCoverage": 0.024128954745694833,
       "isCrossLayer": false
     },
-    "pkg:maven/org.mockito/mockito-junit-jupiter@5.19.0": {
+    "pkg:maven/org.mockito/mockito-junit-jupiter@5.21.0": {
       "clients": [
         "teku"
       ],
@@ -62157,7 +62128,7 @@
       "clCoverage": 0.024128954745694833,
       "isCrossLayer": false
     },
-    "pkg:maven/org.hyperledger.besu.internal/besu-metrics-core@25.11.0": {
+    "pkg:maven/org.hyperledger.besu.internal/besu-metrics-core@26.1.0": {
       "clients": [
         "teku"
       ],
@@ -62165,7 +62136,7 @@
       "clCoverage": 0.024128954745694833,
       "isCrossLayer": false
     },
-    "pkg:maven/org.hyperledger.besu.internal/besu-ethereum-core@25.11.0": {
+    "pkg:maven/org.hyperledger.besu.internal/besu-ethereum-core@26.1.0": {
       "clients": [
         "teku"
       ],
@@ -62173,7 +62144,7 @@
       "clCoverage": 0.024128954745694833,
       "isCrossLayer": false
     },
-    "pkg:maven/org.hyperledger.besu.internal/besu-config@25.11.0": {
+    "pkg:maven/org.hyperledger.besu.internal/besu-config@26.1.0": {
       "clients": [
         "teku"
       ],
@@ -62181,7 +62152,7 @@
       "clCoverage": 0.024128954745694833,
       "isCrossLayer": false
     },
-    "pkg:maven/org.hyperledger.besu/besu-datatypes@25.11.0": {
+    "pkg:maven/org.hyperledger.besu/besu-datatypes@26.1.0": {
       "clients": [
         "teku"
       ],
@@ -62189,7 +62160,7 @@
       "clCoverage": 0.024128954745694833,
       "isCrossLayer": false
     },
-    "pkg:maven/org.hyperledger.besu/besu-evm@25.11.0": {
+    "pkg:maven/org.hyperledger.besu/besu-evm@26.1.0": {
       "clients": [
         "teku"
       ],
@@ -62197,7 +62168,7 @@
       "clCoverage": 0.024128954745694833,
       "isCrossLayer": false
     },
-    "pkg:maven/org.hyperledger.besu/besu-plugin-api@25.11.0": {
+    "pkg:maven/org.hyperledger.besu/besu-plugin-api@26.1.0": {
       "clients": [
         "teku"
       ],
@@ -62205,7 +62176,7 @@
       "clCoverage": 0.024128954745694833,
       "isCrossLayer": false
     },
-    "pkg:maven/org.testcontainers/testcontainers@1.21.3": {
+    "pkg:maven/org.testcontainers/testcontainers@1.21.4": {
       "clients": [
         "teku"
       ],
@@ -62213,7 +62184,7 @@
       "clCoverage": 0.024128954745694833,
       "isCrossLayer": false
     },
-    "pkg:maven/org.testcontainers/junit-jupiter@1.21.3": {
+    "pkg:maven/org.testcontainers/junit-jupiter@1.21.4": {
       "clients": [
         "teku"
       ],
@@ -74335,9 +74306,9 @@
       "clients": [
         "nethermind",
         "besu",
+        "teku",
         "reth",
-        "lighthouse",
-        "teku"
+        "lighthouse"
       ],
       "elCoverage": 0.4257375893666297,
       "clCoverage": 0.4015218261914297,
@@ -81587,6 +81558,30 @@
       "isCrossLayer": true
     },
     {
+      "purl": "pkg:maven/io.netty/netty-codec-http@4.2.10.Final",
+      "name": "io.netty/netty-codec-http",
+      "ecosystem": "java",
+      "clients": [
+        "besu",
+        "teku"
+      ],
+      "elCoverage": 0.09445171684623906,
+      "clCoverage": 0.024128954745694833,
+      "isCrossLayer": true
+    },
+    {
+      "purl": "pkg:maven/io.netty/netty-handler@4.2.10.Final",
+      "name": "io.netty/netty-handler",
+      "ecosystem": "java",
+      "clients": [
+        "besu",
+        "teku"
+      ],
+      "elCoverage": 0.09445171684623906,
+      "clCoverage": 0.024128954745694833,
+      "isCrossLayer": true
+    },
+    {
       "purl": "pkg:maven/javax.annotation/javax.annotation-api@1.3.2",
       "name": "javax.annotation/javax.annotation-api",
       "ecosystem": "java",
@@ -81732,7 +81727,7 @@
       "isCrossLayer": true
     },
     {
-      "purl": "pkg:maven/org.jupnp/org.jupnp@3.0.3",
+      "purl": "pkg:maven/org.jupnp/org.jupnp@3.0.4",
       "name": "org.jupnp/org.jupnp",
       "ecosystem": "java",
       "clients": [
@@ -81744,7 +81739,7 @@
       "isCrossLayer": true
     },
     {
-      "purl": "pkg:maven/org.jupnp/org.jupnp.support@3.0.3",
+      "purl": "pkg:maven/org.jupnp/org.jupnp.support@3.0.4",
       "name": "org.jupnp/org.jupnp.support",
       "ecosystem": "java",
       "clients": [
@@ -81778,6 +81773,18 @@
       "elCoverage": 0.09445171684623906,
       "clCoverage": 0.024128954745694833,
       "isCrossLayer": true
+    },
+    {
+      "purl": "pkg:maven/tech.pegasys.discovery/discovery@26.2.0",
+      "name": "tech.pegasys.discovery/discovery",
+      "ecosystem": "java",
+      "clients": [
+        "besu",
+        "teku"
+      ],
+      "elCoverage": 0.09445171684623906,
+      "clCoverage": 0.024128954745694833,
+      "isCrossLayer": true
     }
   ],
   "ecosystemStats": {
@@ -81802,8 +81809,8 @@
         "besu",
         "teku"
       ],
-      "sharedDeps": 23,
-      "totalDeps": 1053
+      "sharedDeps": 27,
+      "totalDeps": 1049
     },
     "rust": {
       "clients": [
