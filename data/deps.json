@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-03-10T04:40:43.019Z",
+  "generatedAt": "2026-03-11T04:41:06.546Z",
   "clients": [
     {
       "id": "geth",
@@ -10,7 +10,7 @@
       "elNetworkShare": 0.5012586849259894,
       "clNetworkShare": 0,
       "scannedTag": "v1.17.1",
-      "scannedAt": "2026-03-10T04:38:52.968Z",
+      "scannedAt": "2026-03-11T04:39:06.863Z",
       "tagPinned": true,
       "limitations": []
     },
@@ -23,7 +23,7 @@
       "elNetworkShare": 0.25455643943208134,
       "clNetworkShare": 0,
       "scannedTag": "1.36.1",
-      "scannedAt": "2026-03-10T04:39:01.999Z",
+      "scannedAt": "2026-03-11T04:39:16.407Z",
       "tagPinned": true,
       "limitations": []
     },
@@ -36,7 +36,7 @@
       "elNetworkShare": 0.09445171684623906,
       "clNetworkShare": 0,
       "scannedTag": "26.2.0",
-      "scannedAt": "2026-03-10T04:39:02.759Z",
+      "scannedAt": "2026-03-11T04:39:17.558Z",
       "tagPinned": true,
       "limitations": []
     },
@@ -49,7 +49,7 @@
       "elNetworkShare": 0.06525022656328668,
       "clNetworkShare": 0,
       "scannedTag": "v3.3.9",
-      "scannedAt": "2026-03-10T04:39:39.115Z",
+      "scannedAt": "2026-03-11T04:40:01.964Z",
       "tagPinned": true,
       "limitations": []
     },
@@ -61,8 +61,8 @@
       "ecosystem": "rust",
       "elNetworkShare": 0.07672943308830933,
       "clNetworkShare": 0,
-      "scannedTag": "v1.11.1",
-      "scannedAt": "2026-03-10T04:40:10.864Z",
+      "scannedTag": "v1.11.2",
+      "scannedAt": "2026-03-11T04:40:34.126Z",
       "tagPinned": true,
       "limitations": []
     },
@@ -75,7 +75,7 @@
       "elNetworkShare": 0,
       "clNetworkShare": 0.37739287144573486,
       "scannedTag": "v8.1.2",
-      "scannedAt": "2026-03-10T04:40:40.953Z",
+      "scannedAt": "2026-03-11T04:41:03.999Z",
       "tagPinned": true,
       "limitations": []
     },
@@ -88,7 +88,7 @@
       "elNetworkShare": 0,
       "clNetworkShare": 0.49783740488586303,
       "scannedTag": "v7.1.2",
-      "scannedAt": "2026-03-10T04:40:41.900Z",
+      "scannedAt": "2026-03-11T04:41:04.844Z",
       "tagPinned": true,
       "limitations": [
         "Prysm uses Bazel as primary build system; go.sum reflects Go module deps only"
@@ -103,7 +103,7 @@
       "elNetworkShare": 0,
       "clNetworkShare": 0.024128954745694833,
       "scannedTag": "26.3.0",
-      "scannedAt": "2026-03-10T04:40:42.225Z",
+      "scannedAt": "2026-03-11T04:41:05.458Z",
       "tagPinned": true,
       "limitations": [
         "Direct dependencies only — no Gradle lock file exists in repo",
@@ -119,7 +119,7 @@
       "elNetworkShare": 0,
       "clNetworkShare": 0.004325190228273929,
       "scannedTag": "v1.40.0",
-      "scannedAt": "2026-03-10T04:40:42.630Z",
+      "scannedAt": "2026-03-11T04:41:05.952Z",
       "tagPinned": true,
       "limitations": []
     },
@@ -132,7 +132,7 @@
       "elNetworkShare": 0,
       "clNetworkShare": 0.05100120144173008,
       "scannedTag": "v26.3.0",
-      "scannedAt": "2026-03-10T04:40:42.991Z",
+      "scannedAt": "2026-03-11T04:41:06.515Z",
       "tagPinned": true,
       "limitations": [
         "Direct dependencies only — Nim ecosystem uses git submodules, no transitive resolution",
