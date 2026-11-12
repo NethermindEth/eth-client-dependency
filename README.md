@@ -2,6 +2,8 @@
 
 Tracks and visualises shared dependency concentration across Ethereum execution and consensus layer clients. Surfaces cross-client and cross-layer library overlap — including native C/C++ dependencies detected via FFI — weighted by real network share.
 
+**[View the live dependency dashboard](https://ethereum-client-dependencies.vercel.app)**
+
 ## Why this exists
 
 A critical vulnerability in a shared dependency can simultaneously affect multiple Ethereum clients. The more of the network those clients cover, the higher the systemic risk. This project makes that overlap visible: which libraries does Geth share with Lighthouse? Which C libraries are linked by both EL and CL clients? How much of the validator set is exposed if `blst` has a bug?
@@ -21,7 +23,7 @@ A critical vulnerability in a shared dependency can simultaneously affect multip
 | [Nimbus](https://github.com/status-im/nimbus-eth2) | CL | Nim | 12% of validators |
 | [Lodestar](https://github.com/ChainSafe/lodestar) | CL | TypeScript | 7% of validators |
 
-Network shares are fetched live from the Migalabs API on each collection run and fall back to the hardcoded values above.
+The live dashboard fetches network shares from the Migalabs API on each collection run. The table above shows the hardcoded fallback weights used when that fetch fails.
 
 ## Dashboard pages
 
