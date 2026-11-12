@@ -62,10 +62,13 @@ export async function collectNimbus(config: ClientConfig): Promise<ClientResult>
   // Fetch vendor/ directory contents via GitHub Contents API to get pinned commit SHAs.
   // Each submodule entry in the directory listing has a `sha` field — the exact commit pinned.
   const shaByPath = new Map<string, string>()
+  const submodulePaths = new Set(filtered.map(s => s.path))
   try {
     const vendorEntries = await fetchDirContents(config.repo, tag, 'vendor')
     for (const entry of vendorEntries) {
-      if (entry.type === 'submodule') {
+      // GitHub directory listings label submodules as "file" for backwards compatibility.
+      // Only accept paths declared in .gitmodules so ordinary files cannot become deps.
+      if (submodulePaths.has(entry.path)) {
         shaByPath.set(entry.path, entry.sha)
       }
     }
